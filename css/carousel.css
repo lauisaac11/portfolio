@@ -1,0 +1,227 @@
+/* 定義自定義字體 */
+@font-face {
+    font-family: "cubic_11";
+    src: url("../fonts/Cubic_11.ttf");
+}
+
+/* 全域頁面設定 */
+body {
+    margin: 0;
+    background: linear-gradient(#a062e9, #00ffff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-family: "cubic_11", sans-serif;
+}
+
+/* 頁首樣式 */
+header {
+    background-color: #f7f7f7;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+header img {
+    width: 68px;
+    height: 63px;
+    object-fit: contain;
+}
+
+/* 底部建築裝飾圖 */
+.bottom-building {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: soft-light;
+    margin-top: auto;
+    z-index: -1;
+}
+
+/* 頁尾樣式 */
+footer {
+    background-color: #f7f7f7;
+    height: 80px;
+    width: 100%;
+}
+
+/* 輪播圖樣式 */
+.carousel-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 600px;
+}
+
+.crop-layer {
+    width: 100%;
+    max-width: 1200px;
+    height: 500px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+    -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+}
+
+.container {
+    position: relative;
+    width: 300px;
+    height: 450px;
+    perspective: 1200px;
+    transform-style: preserve-3d;
+}
+
+.item {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    user-select: none;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    background-color: #ffffff;
+}
+
+.item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+    opacity: 0; /* 預設隱藏直到加載完畢 */
+    transition: opacity 0.5s ease;
+}
+
+.item.loaded img {
+    opacity: 1;
+}
+
+/* --- 粉藍白加載動畫樣式 --- */
+.loader {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    z-index: 10;
+    transition: opacity 0.5s ease, visibility 0.5s;
+}
+
+.item.loaded .loader {
+    opacity: 0;
+    visibility: hidden;
+}
+
+.loader-bracket {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    border: 2px solid #bde0fe; /* 藍 */
+    border-radius: 4px;
+    animation: bracket-rotate 2s ease-in-out infinite;
+}
+
+.loader-bracket::before, .loader-bracket::after {
+    content: '';
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    border: 2px solid #ffc8dd; /* 粉 */
+}
+
+.loader-bracket::before { top: -6px; left: -6px; border-right: none; border-bottom: none; }
+.loader-bracket::after { bottom: -6px; right: -6px; border-left: none; border-top: none; }
+
+.loader-heart {
+    width: 20px;
+    height: 20px;
+    background: #ff85a2; /* 粉紅核心 */
+    border-radius: 2px;
+    animation: heart-bounce 0.8s ease-in-out infinite alternate;
+}
+
+.loader-text {
+    margin-top: 40px;
+    color: #7fb3d5;
+    font-size: 10px;
+    letter-spacing: 2px;
+}
+
+@keyframes bracket-rotate {
+    0% { transform: rotate(0deg) scale(0.8); }
+    50% { transform: rotate(90deg) scale(1.1); }
+    100% { transform: rotate(180deg) scale(0.8); }
+}
+
+@keyframes heart-bounce {
+    from { transform: scale(0.8); }
+    to { transform: scale(1.2); }
+}
+
+/* 按鈕與預覽燈箱樣式 */
+.btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+    z-index: 2000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
+    transition: all 0.2s ease;
+}
+
+.btn:active { transform: translateY(-50%) scale(0.9); filter: brightness(0.6); }
+.prev { left: 50px; }
+.next { right: 50px; }
+
+.preview-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.preview-modal.active { opacity: 1; visibility: visible; }
+.preview-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    transform: scale(0.8);
+    transition: 0.3s;
+}
+.preview-modal.active .preview-content { transform: scale(1); }
+.close-preview { position: absolute; top: 20px; right: 30px; color: white; font-size: 50px; cursor: pointer; }
+
+@media (max-width: 768px) {
+    .container { width: 220px; height: 330px; }
+    .prev { left: 10px; }
+    .next { right: 10px; }
+}
