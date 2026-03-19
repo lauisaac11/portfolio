@@ -149,14 +149,14 @@
         }
 
         footer {
-            background-color: #f7f7f7;
+            background-color: #ffffff;
             height: 80px;
             width: 100%;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             align-items: center;
-            gap: 20px;        
+            gap: 20px;
         }
 
         
