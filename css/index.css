@@ -1,0 +1,200 @@
+@font-face {
+    font-family: "cubic_11";
+    src: url("../fonts/Cubic_11.ttf");
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(#a062e9, #00ffff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none; /* 防止阻擋滑鼠事件 */
+}
+
+/* 頁首 */
+header {
+    background-color: #ffffff;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+    box-sizing: border-box;
+    flex-shrink: 0;
+}
+
+header img {
+    width: 68px;
+    height: 63px;
+}
+
+/* 影片佈局邏輯 */
+main {
+    flex: 1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 5%;
+    box-sizing: border-box;
+}
+
+.right_content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 20px;
+    margin-left: auto;
+    /* 即使沒有左側內容，也會自動把盒子推向右邊 */
+}
+
+.my_ip_container {
+    width: 100%;
+    max-width: 352px;
+    position: relative;
+}
+
+.my_ip {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 20px;
+}
+
+/* 頁尾 */
+footer {
+    background-color: #ffffff;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+}
+
+/* 左側內容區塊 */
+.left_content_wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.hi_isaac_img {
+    width: 640px;
+    max-width: 100%;
+    height: auto;
+    object-fit: contain;
+}
+
+.left_content {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 40px;
+}
+
+/* 首頁按鈕共用樣式 (參考 portfolio) */
+.index-btn {
+    width: 300px;
+    height: 80px;
+    border-radius: 24px;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), background-color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    -webkit-transform: translateZ(0); 
+    transform: translateZ(0);        
+    will-change: transform;       
+    touch-action: manipulation;
+    -webkit-backface-visibility: hidden; 
+    backface-visibility: hidden;
+}
+
+.index-btn:active {
+    transform: scale(0.92); 
+    background-color: #ffdb4a !important; 
+    transition: transform 0.05s ease; 
+}
+
+.btn-inner {
+    width: 288px;
+    height: 68px;
+    margin: 6px;
+    border-radius: 20px;
+    border: 3px solid #ffffff;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-inner span {
+    font-family: "cubic_11", sans-serif;
+    color: #ffffff;
+    font-size: 46px;
+    transform: translateY(3px);
+}
+
+/* 粉色按鈕 */
+.btn-pink {
+    background-color: #ff7bf3;
+}
+
+@media (hover: hover) {
+    .btn-pink:hover {
+        background-color: #e066d9;
+    }
+}
+
+/* 藍色按鈕 */
+.btn-blue {
+    background-color: #4dcaff;
+}
+
+@media (hover: hover) {
+    .btn-blue:hover {
+        background-color: #3abbee;
+    }
+}
+
+/* RWD 響應式排版 */
+@media (max-width: 1100px) {
+    main {
+        flex-direction: column;
+        justify-content: center;
+        gap: 40px;
+    }
+    .right_content {
+        margin-left: 0;
+        align-items: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .left_content {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .hi_isaac_img {
+        width: 300px;
+    }
+}

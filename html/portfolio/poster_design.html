@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劉俊興 作品集</title>
+    <link rel="stylesheet" href="../../css/tender_grid.css">
+    <link rel="stylesheet" href="../../css/nav.css">
+    <link rel="stylesheet" href="../../css/css.css">
+    <link rel="stylesheet" href="../../css/back_to_top.css">
+</head>
+
+<body>
+
+    <header>
+        <a href="../../index.html">
+            <img src="../../img/my_logo.png" alt="Logo"
+                onerror="this.src='https://via.placeholder.com/68x63?text=Logo'">
+        </a>
+        <nav>
+            <input type="checkbox" id="nav-checkbox">
+            <label for="nav-checkbox" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-links">
+                <li><a href="../../index.html">首頁</a></li>
+                <li><a href="../introduction.html">關於我</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
+                    <ul class="dropdown-content">
+                        <li><a href="../portfolio.html">全部作品</a></li>
+                        <li><a href="ip_design.html">形象設計</a></li>
+                        <li><a href="poster_design.html">海報設計</a></li>
+                        <li><a href="tender_design.html">標案設計</a></li>
+                        <li><a href="text_design.html">文字設計</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="folder-grid">
+            <div class="folder-card" data-preview="../../img/poster_design/chess_challenge.webp">
+                <div class="folder-number">01</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/chess_challenge.webp" alt="1" class="folder-img">
+            </div>
+            <div class="folder-card" data-preview="../../img/poster_design/chess_club_recruitment.webp">
+                <div class="folder-number">02</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/chess_club_recruitment.webp" alt="2" class="folder-img">
+            </div>
+            <div class="folder-card" data-preview="../../img/poster_design/christmas_market.webp">
+                <div class="folder-number">03</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/christmas_market.webp" alt="3" class="folder-img">
+            </div>
+            <div class="folder-card" data-preview="../../img/poster_design/game_taste.webp">
+                <div class="folder-number">04</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/game_taste.webp" alt="4" class="folder-img">
+            </div>
+            <div class="folder-card" data-preview="../../img/poster_design/magic_war.webp">
+                <div class="folder-number">05</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/magic_war.webp" alt="5" class="folder-img">
+            </div>
+            <div class="folder-card" data-preview="../../img/poster_design/mahjong_competition.webp">
+                <div class="folder-number">06</div>
+                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
+                <img src="../../img/poster_design/mahjong_competition.webp" alt="6" class="folder-img">
+            </div>
+        </div>
+    </main>
+
+    <img class="bottom-building" src="../../img/building1920X200.png" alt="Decor">
+
+    <footer>
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
+            <img style="width: 45px; height: 45px;" src="../../img/fb_logo45X45.png" alt="FB_logo">
+        </a>
+        <a href="https://www.threads.com/@junxing0613">
+            <img style="width: 45px; height: 45px;" src="../../img/threads_logo45X45.png" alt="threads_logo">
+        </a>
+    </footer>
+
+    <div class="preview-modal" id="previewModal">
+        <span class="close-preview" id="closePreview">&times;</span>
+        <img class="preview-content" id="previewImg" src="" alt="預覽圖">
+    </div>
+
+    <script src="../../script/preview_box.js"></script>
+    <script src="../../script/back_to_top.js"></script>
+</body>
+
+</html>

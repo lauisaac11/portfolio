@@ -1,0 +1,191 @@
+/* 定義自定義字體 */
+@font-face {
+    font-family: "cubic_11";
+    src: url("../fonts/Cubic_11.ttf");
+}
+
+/* 全域頁面設定 */
+body {
+    margin: 0;
+    background: linear-gradient(#a062e9, #00ffff);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+    font-family: "cubic_11", sans-serif;
+}
+
+/* 頁首樣式 */
+header {
+    background-color: #f7f7f7;
+    height: 80px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 5%;
+    box-sizing: border-box;
+    z-index: 100;
+}
+
+header img {
+    width: 68px;
+    height: 63px;
+    object-fit: contain;
+}
+
+/* 底部建築裝飾圖 */
+.bottom-building {
+    width: 100%;
+    height: auto;
+    mix-blend-mode: soft-light;
+    margin-top: auto;
+    z-index: -1;
+}
+
+/* 頁尾樣式 */
+footer {
+    background-color: #f7f7f7;
+    height: 80px;
+    width: 100%;
+}
+
+/* ===== 資料夾格狀佈局 ===== */
+.folder-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: start;
+    gap: 24px;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 0 20px;
+}
+
+.folder-card {
+    position: relative;
+    width: calc(25% - 18px);
+    aspect-ratio: 1 / 1;
+    border-radius: 20px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+
+.folder-card:hover {
+    transform: translateY(-6px) scale(1.03);
+}
+
+.folder-card:active {
+    transform: scale(0.97);
+}
+
+/* folder_back.png 鋪滿當底圖 */
+.folder-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+/* 標案設計圖放在資料夾白色區域內 */
+.folder-img {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 82%;
+    max-height: 72%;
+    width: auto;
+    height: auto;
+    border-radius: 16px;
+    transition: transform 0.3s ease;
+}
+
+.folder-card:hover .folder-img {
+    transform: translate(-50%, -50%) scale(1.08);
+}
+
+/* 編號樣式放在左上突出處 */
+.folder-number {
+    position: absolute;
+    top: 6%;       /* 微調垂直位置以對齊標籤 */
+    left: 8%;      /* 微調水平位置以對齊標籤 */
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    z-index: 10;
+    pointer-events: none; /* 避免干擾點擊 */
+}
+
+/* 預覽燈箱樣式 */
+.preview-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 0;
+    visibility: hidden;
+    transition: 0.3s;
+    backdrop-filter: blur(10px);
+}
+
+.preview-modal.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.preview-content {
+    max-width: 95vw;
+    max-height: 90vh;
+    transform: scale(0.8);
+    transition: 0.3s;
+}
+
+.preview-modal.active .preview-content {
+    transform: scale(1);
+}
+
+.close-preview {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    color: white;
+    font-size: 50px;
+    cursor: pointer;
+}
+
+/* ===== RWD 響應式 ===== */
+@media (max-width: 992px) {
+    .folder-card {
+        width: calc(33.333% - 16px);
+    }
+}
+
+@media (max-width: 768px) {
+    .folder-card {
+        width: calc(50% - 8px);
+    }
+
+    .folder-grid {
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .folder-card {
+        width: calc(50% - 6px);
+    }
+
+    .folder-grid {
+        gap: 12px;
+        padding: 0 12px;
+        margin: 20px auto;
+    }
+}

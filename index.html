@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劉俊興 作品集</title>
+    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="css/back_to_top.css">
+
+
+</head>
+
+
+<body>
+    <canvas id="particleCanvas"></canvas>
+
+    <header>
+        <a href="index.html">
+            <img src="img/my_logo.png" alt="Logo">
+        </a>
+        <nav>
+            <input type="checkbox" id="nav-checkbox">
+            <label for="nav-checkbox" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-links">
+                <li><a href="index.html">首頁</a></li>
+                <li><a href="html/introduction.html">關於我</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
+                    <ul class="dropdown-content">
+                        <li><a href="html/portfolio.html">全部作品</a></li>
+                        <li><a href="html/portfolio/ip_design.html">形象設計</a></li>
+                        <li><a href="html/portfolio/poster_design.html">海報設計</a></li>
+                        <li><a href="html/portfolio/tender_design.html">標案設計</a></li>
+                        <li><a href="html/portfolio/text_design.html">文字設計</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="left_content_wrapper">
+            <img class="hi_isaac_img" src="img/hiIAmIsaac.webp" alt="Hi I am Isaac">
+            <div class="left_content">
+                <button class="index-btn btn-blue" onclick="location.href='html/introduction.html'">
+                    <div class="btn-inner"><span>關於我</span></div>
+                </button>
+                <button class="index-btn btn-pink" onclick="location.href='html/portfolio.html'">
+                    <div class="btn-inner"><span>作品集</span></div>
+                </button>
+            </div>
+        </div>
+        <div class="right_content">
+            <div class="my_ip_container">
+                <video class="my_ip" src="video/my_ip.webm" autoplay muted loop playsinline></video>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
+            <img style="width: 45px; height: 45px;" src="img/fb_logo45X45.png" alt="FB_logo">
+        </a>
+        <a href="https://www.threads.com/@junxing0613">
+            <img style="width: 45px; height: 45px;" src="img/threads_logo45X45.png" alt="threads_logo">
+        </a>
+    </footer>
+
+    <script src="script/particles.js"></script>
+    <script src="script/back_to_top.js"></script>
+</body>
+
+</html>

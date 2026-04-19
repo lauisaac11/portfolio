@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>劉俊興 作品集</title>
+    <link rel="stylesheet" href="../css/css.css">
+    <link rel="stylesheet" href="../css/nav.css">
+    <link rel="stylesheet" href="../css/px_spaceship.css">
+    <link rel="stylesheet" href="../css/back_to_top.css">
+
+</head>
+
+
+<body>
+
+    <header>
+        <a href="../index.html">
+            <img src="../img/my_logo.png" alt="Logo">
+        </a>
+        <nav>
+            <input type="checkbox" id="nav-checkbox">
+            <label for="nav-checkbox" class="menu-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+            <ul class="nav-links">
+                <li><a href="../index.html">首頁</a></li>
+                <li><a href="introduction.html">關於我</a></li>
+                <li class="dropdown">
+                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
+                    <ul class="dropdown-content">
+                        <li><a href="portfolio.html">全部作品</a></li>
+                        <li><a href="portfolio/ip_design.html">形象設計</a></li>
+                        <li><a href="portfolio/poster_design.html">海報設計</a></li>
+                        <li><a href="portfolio/tender_design.html">標案設計</a></li>
+                        <li><a href="portfolio/text_design.html">文字設計</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </nav>
+    </header>
+
+    <main style="flex: 1;">
+        <div class="logo-type-container">
+            <img src="../img/protfolio_logotype.webp" alt="Portfolio Title">
+        </div>
+
+        <div class="portfolio-container">
+
+            <div class="card">
+                <div class="card-top">
+                    <img style="width: 177px; height: 205px;" src="../img/macarons_px.webp" alt="形象設計">
+                </div>
+                <button class="card-btn" onclick="location.href='portfolio/ip_design.html'">
+                    <div class="btn-inner"><span>形象設計</span></div>
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-top">
+                    <img style="width: 152px; height: 205px;" src="../img/poster_design185X205.webp" alt="海報設計">
+                </div>
+                <button class="card-btn" onclick="location.href='portfolio/poster_design.html'">
+                    <div class="btn-inner"><span>海報設計</span></div>
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-top">
+                    <img style="width: 185px; height: 205px;" src="../img/tender_design.webp" alt="標案設計">
+                </div>
+                <button class="card-btn" onclick="location.href='portfolio/tender_design.html'">
+                    <div class="btn-inner"><span>標案設計</span></div>
+                </button>
+            </div>
+
+            <div class="card">
+                <div class="card-top">
+                    <img style="width: 92px; height: 205px;" src="../img/text_design92X205.webp" alt="文字設計">
+                </div>
+                <button class="card-btn" onclick="location.href='portfolio/text_design.html'">
+                    <div class="btn-inner"><span>文字設計</span></div>
+                </button>
+            </div>
+
+        </div>
+    </main>
+
+    <div class="space-container">
+        <img class="looping-ship" src="../img/px_spaceship.gif" alt="px_spaceship">
+    </div>
+
+    <img class="bottom-building" src="../img/169426.webp" alt="Decor">
+
+    <footer>
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
+            <img style="width: 45px; height: 45px;" src="../img/fb_logo45X45.png" alt="FB_logo">
+        </a>
+        <a href="https://www.threads.com/@junxing0613">
+            <img style="width: 45px; height: 45px;" src="../img/threads_logo45X45.png" alt="threads_logo">
+        </a>
+    </footer>
+
+    <script src="../script/back_to_top.js"></script>
+</body>
+
+</html>

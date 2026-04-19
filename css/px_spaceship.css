@@ -1,0 +1,29 @@
+.space-container {
+  width: 100%;
+  height: 50px;  
+  overflow: hidden;
+  position: relative;
+}
+
+.looping-ship {
+  position: absolute;
+  width: 150px; /* 調整飛船大小 */
+  top: 50%;
+  transform: translateY(-50%);
+  
+  /* 設定初始位置在畫面右側外 */
+  right: -250px; 
+  
+  /* 執行向左飛的動畫：10秒一趟、勻速、無限循環 */
+  animation: moveLeft 10s linear infinite;
+}
+
+@keyframes moveLeft {
+  from {
+    right: -250px;
+  }
+  to {
+    /* 飛到左側畫面外，100% 寬度加上飛船本身的寬度 */
+    right: calc(100% + 250px);
+  }
+}

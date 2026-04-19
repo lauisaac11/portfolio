@@ -1,0 +1,183 @@
+/* Navigation Styles */
+nav {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 30px;
+}
+
+.nav-links li a {
+    text-decoration: none;
+    color: #333333;
+    font-family: "cubic_11", sans-serif;
+    font-size: 20px;
+    transition: color 0.3s ease;
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.nav-links li a:hover {
+    color: #ff7bf3;
+}
+
+/* Toggle Menu for Mobile */
+.menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    gap: 5px;
+    z-index: 100;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: #333333;
+    border-radius: 3px;
+    transition: 0.3s;
+}
+
+#nav-checkbox {
+    display: none;
+}
+
+/* Mobile Responsive < 780px */
+@media screen and (max-width: 780px) {
+    .menu-toggle {
+        display: flex;
+    }
+
+    .nav-links {
+        position: absolute;
+        top: 80px; /* Header height */
+        right: 0;
+        background-color: #ffffff;
+        width: 200px;
+        flex-direction: column;
+        gap: 0;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        display: none; /* Hidden by default */
+        z-index: 99;
+    }
+
+    .nav-links li {
+        width: 100%;
+    }
+
+    .nav-links li a {
+        display: block;
+        padding: 15px 25px;
+        border-bottom: 1px solid #f0f0f0;
+    }
+
+    #nav-checkbox:checked ~ .nav-links {
+        display: flex;
+    }
+
+    /* Hamburger Animation */
+    #nav-checkbox:checked ~ .menu-toggle span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 6px);
+    }
+    #nav-checkbox:checked ~ .menu-toggle span:nth-child(2) {
+        opacity: 0;
+    }
+    #nav-checkbox:checked ~ .menu-toggle span:nth-child(3) {
+        transform: rotate(-45deg) translate(5px, -6px);
+    }
+
+    /* Mobile Dropdown Menu */
+    .dropdown-content {
+        position: static;
+        box-shadow: none;
+        transform: none;
+        background-color: #f9f9f9;
+        display: none;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+    .dropdown.active .dropdown-content {
+        display: block;
+    }
+    .dropdown-content li a {
+        padding: 10px 40px;
+        font-size: 16px;
+        text-align: left;
+    }
+}
+
+/* ===== Dropdown Menu (Desktop) ===== */
+.dropdown {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    min-width: 160px;
+    box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    z-index: 100;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    margin-top: 10px; /* Small gap to avoid hover break */
+}
+
+/* Pseudo element to create a bridge for hover */
+.dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 10px;
+}
+
+.dropdown-content li {
+    width: 100%;
+}
+
+.dropdown-content li a {
+    color: #333333;
+    padding: 15px 20px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+    font-size: 16px;
+    font-family: inherit;
+    white-space: nowrap;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.dropdown-content li:last-child a {
+    border-bottom: none;
+}
+
+.dropdown-content li a:hover {
+    background-color: #f7f7f7;
+    color: #ff7bf3;
+}
+
+/* Show dropdown on hover only on larger screens via CSS or it works implicitly since mobile is handled above */
+@media screen and (min-width: 781px) {
+    .dropdown:hover .dropdown-content {
+        display: block;
+    }
+}
