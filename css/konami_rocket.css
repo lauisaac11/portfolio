@@ -1,0 +1,186 @@
+.konami-rocket-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 2147483000;
+    isolation: isolate;
+    contain: strict;
+    overflow: hidden;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+    background: rgba(0, 0, 0, var(--konami-rocket-overlay-opacity, 0.72));
+    opacity: 0;
+    pointer-events: auto;
+    touch-action: none;
+    overscroll-behavior: contain;
+}
+
+.konami-rocket-canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.konami-rocket-vehicle {
+    --konami-rocket-flame-stretch: 0.68;
+    --konami-rocket-flame-width: 0.82;
+    --konami-rocket-flame-opacity: 0.58;
+    --konami-rocket-glow-opacity: 0.18;
+    --konami-rocket-glow-scale: 0.9;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: clamp(100px, 16vw, 220px);
+    opacity: 0;
+    pointer-events: none;
+    will-change: transform, opacity;
+    transform: translate3d(-9999px, -9999px, 0);
+    transform-origin: 50% 72%;
+}
+
+.konami-rocket-image {
+    position: relative;
+    z-index: 3;
+    display: block;
+    width: 100%;
+    height: auto;
+    max-height: 54vh;
+    object-fit: contain;
+    user-select: none;
+    -webkit-user-drag: none;
+    filter: drop-shadow(0 8px 20px rgba(38, 137, 255, 0.28));
+}
+
+.konami-rocket-glow {
+    position: absolute;
+    top: 8%;
+    left: 8%;
+    z-index: 0;
+    width: 84%;
+    height: 82%;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(151, 249, 255, 0.72) 0%,
+        rgba(48, 150, 255, 0.35) 38%,
+        rgba(126, 89, 255, 0.16) 58%,
+        rgba(0, 0, 0, 0) 76%
+    );
+    opacity: var(--konami-rocket-glow-opacity);
+    transform: scale(var(--konami-rocket-glow-scale));
+    filter: blur(clamp(12px, 2.5vw, 28px));
+    mix-blend-mode: screen;
+    will-change: transform, opacity;
+}
+
+.konami-rocket-ion-flame {
+    position: absolute;
+    top: 74%;
+    left: 50%;
+    z-index: 1;
+    width: 36%;
+    height: clamp(100px, 17vw, 230px);
+    border-radius: 50% 50% 68% 68%;
+    background:
+        radial-gradient(
+            ellipse at 50% 2%,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(212, 255, 255, 0.96) 10%,
+            rgba(101, 238, 255, 0.88) 25%,
+            rgba(54, 148, 255, 0.65) 48%,
+            rgba(118, 80, 255, 0.3) 66%,
+            rgba(0, 0, 0, 0) 82%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(238, 255, 255, 0.9),
+            rgba(68, 201, 255, 0.6) 36%,
+            rgba(105, 77, 255, 0.18) 72%,
+            rgba(0, 0, 0, 0)
+        );
+    opacity: var(--konami-rocket-flame-opacity);
+    transform: translateX(-50%)
+        scaleX(var(--konami-rocket-flame-width))
+        scaleY(var(--konami-rocket-flame-stretch));
+    transform-origin: 50% 0;
+    filter: blur(1.2px) brightness(1.08)
+        drop-shadow(0 18px 18px rgba(58, 195, 255, 0.72));
+    mix-blend-mode: screen;
+    will-change: transform, opacity, filter;
+    animation: konami-rocket-ion-pulse 140ms ease-in-out infinite alternate;
+}
+
+.konami-rocket-ion-flame::before,
+.konami-rocket-ion-flame::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+
+.konami-rocket-ion-flame::before {
+    top: 0;
+    width: 30%;
+    height: 72%;
+    border-radius: 50%;
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 255, 255, 1),
+        rgba(188, 254, 255, 0.96) 25%,
+        rgba(80, 212, 255, 0.72) 60%,
+        rgba(0, 0, 0, 0)
+    );
+    filter: blur(0.6px);
+}
+
+.konami-rocket-ion-flame::after {
+    top: 2%;
+    width: 150%;
+    height: 76%;
+    border-radius: 50%;
+    background: radial-gradient(
+        ellipse at 50% 15%,
+        rgba(84, 222, 255, 0.46),
+        rgba(87, 98, 255, 0.2) 46%,
+        rgba(0, 0, 0, 0) 72%
+    );
+    filter: blur(10px);
+}
+
+@keyframes konami-rocket-ion-pulse {
+    from {
+        filter: blur(1px) brightness(1.02)
+            drop-shadow(0 14px 14px rgba(58, 195, 255, 0.62));
+    }
+
+    to {
+        filter: blur(1.6px) brightness(1.22)
+            drop-shadow(0 24px 24px rgba(108, 218, 255, 0.86));
+    }
+}
+
+@media (max-width: 720px) {
+    .konami-rocket-vehicle {
+        width: clamp(100px, 30vw, 160px);
+    }
+
+    .konami-rocket-ion-flame {
+        height: clamp(92px, 31vw, 170px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .konami-rocket-ion-flame {
+        animation-duration: 320ms;
+    }
+
+    .konami-rocket-image {
+        filter: drop-shadow(0 6px 14px rgba(38, 137, 255, 0.22));
+    }
+}
