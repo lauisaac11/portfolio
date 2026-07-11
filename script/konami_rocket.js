@@ -14,6 +14,17 @@
         "KeyA"
     ]);
 
+    const TOUCH_SEQUENCE = Object.freeze([
+        "up",
+        "up",
+        "down",
+        "down",
+        "left",
+        "right",
+        "left",
+        "right"
+    ]);
+
     const SCRIPT_URL = document.currentScript?.src || document.baseURI;
 
     // Replace this file only when a different rocket asset is supplied.
@@ -32,7 +43,14 @@
         mobileParticleMultiplier: 0.55,
         reducedMotionMultiplier: 0.34,
         maxDevicePixelRatio: 2,
-        imageLoadTimeout: 5000
+        imageLoadTimeout: 5000,
+        touchStepGap: 3000,
+        touchSwipeMinDistance: 52,
+        touchSwipeMaxDuration: 1200,
+        touchAxisDominance: 1.25,
+        touchLongPressDuration: 2000,
+        touchLongPressMoveTolerance: 14,
+        touchContextMenuGrace: 1000
     });
 
     const FIREWORK_COLORS = Object.freeze([
@@ -110,6 +128,315 @@
 
             reset() {
                 matchedLength = 0;
+            }
+        };
+    }
+
+    function findTouchByIdentifier(touchList, identifier) {
+        for (let index = 0; index < touchList.length; index += 1) {
+            if (touchList[index].identifier === identifier) {
+                return touchList[index];
+            }
+        }
+
+        return null;
+    }
+
+    function classifySwipe(start, end) {
+        const duration = end.time - start.time;
+        const deltaX = end.x - start.x;
+        const deltaY = end.y - start.y;
+        const absoluteX = Math.abs(deltaX);
+        const absoluteY = Math.abs(deltaY);
+
+        if (
+            duration <= 0 ||
+            duration > CONFIG.touchSwipeMaxDuration ||
+            Math.max(absoluteX, absoluteY) < CONFIG.touchSwipeMinDistance
+        ) {
+            return null;
+        }
+
+        if (absoluteY >= absoluteX * CONFIG.touchAxisDominance) {
+            return deltaY < 0 ? "up" : "down";
+        }
+
+        if (absoluteX >= absoluteY * CONFIG.touchAxisDominance) {
+            return deltaX < 0 ? "left" : "right";
+        }
+
+        return null;
+    }
+
+    function createTouchGestureRecognizer(sequence, onMatch, isBlocked) {
+        const passiveListener = { capture: true, passive: true };
+        const activeListener = { capture: true, passive: false };
+        let stepIndex = 0;
+        let activeTouch = null;
+        let gapTimeoutId = 0;
+        let longPressTimeoutId = 0;
+        let lastStepCompletedAt = 0;
+        let suppressContextMenuUntil = 0;
+        let holdProtectionInstalled = false;
+
+        function handleArmedTouchStart(event) {
+            if (
+                stepIndex === sequence.length &&
+                event.touches.length === 1 &&
+                !isBlocked()
+            ) {
+                event.preventDefault();
+            }
+        }
+
+        function installHoldProtection() {
+            if (holdProtectionInstalled) {
+                return;
+            }
+
+            holdProtectionInstalled = true;
+            window.addEventListener(
+                "touchstart",
+                handleArmedTouchStart,
+                activeListener
+            );
+        }
+
+        function removeHoldProtection() {
+            if (!holdProtectionInstalled) {
+                return;
+            }
+
+            holdProtectionInstalled = false;
+            window.removeEventListener(
+                "touchstart",
+                handleArmedTouchStart,
+                true
+            );
+        }
+
+        function clearGapTimeout() {
+            if (gapTimeoutId) {
+                window.clearTimeout(gapTimeoutId);
+                gapTimeoutId = 0;
+            }
+        }
+
+        function clearLongPressTimeout() {
+            if (longPressTimeoutId) {
+                window.clearTimeout(longPressTimeoutId);
+                longPressTimeoutId = 0;
+            }
+        }
+
+        function reset() {
+            clearGapTimeout();
+            clearLongPressTimeout();
+            removeHoldProtection();
+            stepIndex = 0;
+            activeTouch = null;
+            lastStepCompletedAt = 0;
+        }
+
+        function scheduleGapReset() {
+            clearGapTimeout();
+            gapTimeoutId = window.setTimeout(reset, CONFIG.touchStepGap);
+        }
+
+        function finishLongPress() {
+            if (
+                !activeTouch ||
+                stepIndex !== sequence.length ||
+                isBlocked()
+            ) {
+                reset();
+                return;
+            }
+
+            // Keep Safari's context menu suppressed briefly after the timer fires;
+            // the touchend event can arrive after the animation has already started.
+            suppressContextMenuUntil =
+                performance.now() + CONFIG.touchContextMenuGrace;
+            reset();
+            onMatch();
+        }
+
+        function handleTouchStart(event) {
+            if (isBlocked()) {
+                reset();
+                return;
+            }
+
+            // Multi-touch and overlapping touches are treated as interruptions.
+            if (event.touches.length !== 1 || activeTouch) {
+                reset();
+                return;
+            }
+
+            const now = performance.now();
+
+            if (
+                stepIndex > 0 &&
+                now - lastStepCompletedAt > CONFIG.touchStepGap
+            ) {
+                reset();
+            }
+
+            clearGapTimeout();
+            const touch = event.touches[0];
+            activeTouch = {
+                identifier: touch.identifier,
+                startX: touch.clientX,
+                startY: touch.clientY,
+                x: touch.clientX,
+                y: touch.clientY,
+                startTime: now
+            };
+
+            if (stepIndex === sequence.length) {
+                longPressTimeoutId = window.setTimeout(
+                    finishLongPress,
+                    CONFIG.touchLongPressDuration
+                );
+            }
+        }
+
+        function handleTouchMove(event) {
+            if (!activeTouch) {
+                return;
+            }
+
+            if (event.touches.length !== 1) {
+                reset();
+                return;
+            }
+
+            const touch = findTouchByIdentifier(
+                event.touches,
+                activeTouch.identifier
+            );
+
+            if (!touch) {
+                reset();
+                return;
+            }
+
+            activeTouch.x = touch.clientX;
+            activeTouch.y = touch.clientY;
+
+            if (stepIndex === sequence.length) {
+                const movement = Math.hypot(
+                    activeTouch.x - activeTouch.startX,
+                    activeTouch.y - activeTouch.startY
+                );
+
+                if (movement > CONFIG.touchLongPressMoveTolerance) {
+                    reset();
+                }
+            }
+        }
+
+        function handleTouchEnd(event) {
+            if (!activeTouch) {
+                return;
+            }
+
+            // A remaining finger means the interaction was not a single-finger step.
+            if (event.touches.length !== 0) {
+                reset();
+                return;
+            }
+
+            const touch = findTouchByIdentifier(
+                event.changedTouches,
+                activeTouch.identifier
+            );
+
+            if (!touch || stepIndex === sequence.length) {
+                reset();
+                return;
+            }
+
+            const direction = classifySwipe(
+                {
+                    x: activeTouch.startX,
+                    y: activeTouch.startY,
+                    time: activeTouch.startTime
+                },
+                {
+                    x: touch.clientX,
+                    y: touch.clientY,
+                    time: performance.now()
+                }
+            );
+            const expectedDirection = sequence[stepIndex];
+            activeTouch = null;
+
+            // Mobile matching is deliberately strict: a wrong or ambiguous swipe
+            // resets to zero instead of reusing it as a possible new first step.
+            if (direction !== expectedDirection) {
+                reset();
+                return;
+            }
+
+            stepIndex += 1;
+            lastStepCompletedAt = performance.now();
+
+            if (stepIndex === sequence.length) {
+                // Only the final hidden step gets a non-passive listener. Preventing
+                // this touchstart avoids Safari's native callout cancelling the hold,
+                // while all ordinary page swipes remain on the passive fast path.
+                installHoldProtection();
+            }
+
+            scheduleGapReset();
+        }
+
+        function handleContextMenu(event) {
+            const longPressIsArmed =
+                stepIndex === sequence.length && Boolean(activeTouch);
+
+            // Both final-stage guards are active only after all eight hidden swipes.
+            // Swipe listeners stay passive so ordinary scrolling remains unaffected.
+            if (
+                longPressIsArmed ||
+                performance.now() < suppressContextMenuUntil
+            ) {
+                event.preventDefault();
+            }
+        }
+
+        function handleVisibilityChange() {
+            if (document.visibilityState === "hidden") {
+                reset();
+            }
+        }
+
+        window.addEventListener("touchstart", handleTouchStart, passiveListener);
+        window.addEventListener("touchmove", handleTouchMove, passiveListener);
+        window.addEventListener("touchend", handleTouchEnd, passiveListener);
+        window.addEventListener("touchcancel", reset, passiveListener);
+        window.addEventListener("contextmenu", handleContextMenu, true);
+        window.addEventListener("blur", reset);
+        window.addEventListener("pagehide", reset, passiveListener);
+        document.addEventListener("visibilitychange", handleVisibilityChange);
+
+        return {
+            reset,
+            destroy() {
+                reset();
+                suppressContextMenuUntil = 0;
+                window.removeEventListener("touchstart", handleTouchStart, true);
+                window.removeEventListener("touchmove", handleTouchMove, true);
+                window.removeEventListener("touchend", handleTouchEnd, true);
+                window.removeEventListener("touchcancel", reset, true);
+                window.removeEventListener("contextmenu", handleContextMenu, true);
+                window.removeEventListener("blur", reset);
+                window.removeEventListener("pagehide", reset, true);
+                document.removeEventListener(
+                    "visibilitychange",
+                    handleVisibilityChange
+                );
             }
         };
     }
@@ -912,9 +1239,12 @@
 
     function install() {
         const controller = createAnimationController();
-        const matcher = createSequenceMatcher(KEY_SEQUENCE, () => {
+        let touchRecognizer = null;
+        const playAnimation = () => {
+            touchRecognizer?.reset();
             void controller.play();
-        });
+        };
+        const matcher = createSequenceMatcher(KEY_SEQUENCE, playAnimation);
 
         window.addEventListener("keydown", (event) => {
             if (event.repeat || controller.isActive()) {
@@ -923,6 +1253,14 @@
 
             matcher.push(event.code);
         });
+
+        if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
+            touchRecognizer = createTouchGestureRecognizer(
+                TOUCH_SEQUENCE,
+                playAnimation,
+                () => controller.isActive()
+            );
+        }
     }
 
     if (document.readyState === "loading") {
