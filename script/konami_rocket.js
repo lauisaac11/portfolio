@@ -48,9 +48,10 @@
         touchSwipeMinDistance: 52,
         touchSwipeMaxDuration: 1200,
         touchAxisDominance: 1.25,
-        touchLongPressDuration: 2000,
-        touchLongPressMoveTolerance: 14,
-        touchContextMenuGrace: 1000
+        touchTapMaxDuration: 350,
+        touchTapMoveTolerance: 18,
+        touchDoubleTapDelay: 500,
+        touchDoubleTapMaxDistance: 48
     });
 
     const FIREWORK_COLORS = Object.freeze([
@@ -174,12 +175,13 @@
         let stepIndex = 0;
         let activeTouch = null;
         let gapTimeoutId = 0;
-        let longPressTimeoutId = 0;
+        let tapDurationTimeoutId = 0;
+        let doubleTapTimeoutId = 0;
         let lastStepCompletedAt = 0;
-        let suppressContextMenuUntil = 0;
-        let holdProtectionInstalled = false;
+        let firstTap = null;
+        let tapProtectionInstalled = false;
 
-        function handleArmedTouchStart(event) {
+        function handleArmedTapStart(event) {
             if (
                 stepIndex === sequence.length &&
                 event.touches.length === 1 &&
@@ -189,28 +191,28 @@
             }
         }
 
-        function installHoldProtection() {
-            if (holdProtectionInstalled) {
+        function installTapProtection() {
+            if (tapProtectionInstalled) {
                 return;
             }
 
-            holdProtectionInstalled = true;
+            tapProtectionInstalled = true;
             window.addEventListener(
                 "touchstart",
-                handleArmedTouchStart,
+                handleArmedTapStart,
                 activeListener
             );
         }
 
-        function removeHoldProtection() {
-            if (!holdProtectionInstalled) {
+        function removeTapProtection() {
+            if (!tapProtectionInstalled) {
                 return;
             }
 
-            holdProtectionInstalled = false;
+            tapProtectionInstalled = false;
             window.removeEventListener(
                 "touchstart",
-                handleArmedTouchStart,
+                handleArmedTapStart,
                 true
             );
         }
@@ -222,20 +224,29 @@
             }
         }
 
-        function clearLongPressTimeout() {
-            if (longPressTimeoutId) {
-                window.clearTimeout(longPressTimeoutId);
-                longPressTimeoutId = 0;
+        function clearTapDurationTimeout() {
+            if (tapDurationTimeoutId) {
+                window.clearTimeout(tapDurationTimeoutId);
+                tapDurationTimeoutId = 0;
+            }
+        }
+
+        function clearDoubleTapTimeout() {
+            if (doubleTapTimeoutId) {
+                window.clearTimeout(doubleTapTimeoutId);
+                doubleTapTimeoutId = 0;
             }
         }
 
         function reset() {
             clearGapTimeout();
-            clearLongPressTimeout();
-            removeHoldProtection();
+            clearTapDurationTimeout();
+            clearDoubleTapTimeout();
+            removeTapProtection();
             stepIndex = 0;
             activeTouch = null;
             lastStepCompletedAt = 0;
+            firstTap = null;
         }
 
         function scheduleGapReset() {
@@ -243,20 +254,54 @@
             gapTimeoutId = window.setTimeout(reset, CONFIG.touchStepGap);
         }
 
-        function finishLongPress() {
+        function finishTap(touch, endTime) {
+            const tapStartTime = activeTouch.startTime;
+            const duration = endTime - tapStartTime;
+            const movement = Math.hypot(
+                touch.clientX - activeTouch.startX,
+                touch.clientY - activeTouch.startY
+            );
+            activeTouch = null;
+
             if (
-                !activeTouch ||
-                stepIndex !== sequence.length ||
+                duration <= 0 ||
+                duration > CONFIG.touchTapMaxDuration ||
+                movement > CONFIG.touchTapMoveTolerance
+            ) {
+                reset();
+                return;
+            }
+
+            if (!firstTap) {
+                firstTap = {
+                    x: touch.clientX,
+                    y: touch.clientY,
+                    completedAt: endTime
+                };
+                clearGapTimeout();
+                doubleTapTimeoutId = window.setTimeout(
+                    reset,
+                    CONFIG.touchDoubleTapDelay
+                );
+                return;
+            }
+
+            const interval = tapStartTime - firstTap.completedAt;
+            const distance = Math.hypot(
+                touch.clientX - firstTap.x,
+                touch.clientY - firstTap.y
+            );
+
+            if (
+                interval < 0 ||
+                interval > CONFIG.touchDoubleTapDelay ||
+                distance > CONFIG.touchDoubleTapMaxDistance ||
                 isBlocked()
             ) {
                 reset();
                 return;
             }
 
-            // Keep Safari's context menu suppressed briefly after the timer fires;
-            // the touchend event can arrive after the animation has already started.
-            suppressContextMenuUntil =
-                performance.now() + CONFIG.touchContextMenuGrace;
             reset();
             onMatch();
         }
@@ -277,13 +322,35 @@
 
             if (
                 stepIndex > 0 &&
+                !firstTap &&
                 now - lastStepCompletedAt > CONFIG.touchStepGap
             ) {
                 reset();
+                return;
             }
 
-            clearGapTimeout();
             const touch = event.touches[0];
+
+            if (stepIndex === sequence.length && firstTap) {
+                const tapInterval = now - firstTap.completedAt;
+                const tapDistance = Math.hypot(
+                    touch.clientX - firstTap.x,
+                    touch.clientY - firstTap.y
+                );
+
+                if (
+                    tapInterval > CONFIG.touchDoubleTapDelay ||
+                    tapDistance > CONFIG.touchDoubleTapMaxDistance
+                ) {
+                    reset();
+                    return;
+                }
+
+                clearDoubleTapTimeout();
+            } else {
+                clearGapTimeout();
+            }
+
             activeTouch = {
                 identifier: touch.identifier,
                 startX: touch.clientX,
@@ -294,9 +361,9 @@
             };
 
             if (stepIndex === sequence.length) {
-                longPressTimeoutId = window.setTimeout(
-                    finishLongPress,
-                    CONFIG.touchLongPressDuration
+                tapDurationTimeoutId = window.setTimeout(
+                    reset,
+                    CONFIG.touchTapMaxDuration
                 );
             }
         }
@@ -330,7 +397,7 @@
                     activeTouch.y - activeTouch.startY
                 );
 
-                if (movement > CONFIG.touchLongPressMoveTolerance) {
+                if (movement > CONFIG.touchTapMoveTolerance) {
                     reset();
                 }
             }
@@ -352,8 +419,16 @@
                 activeTouch.identifier
             );
 
-            if (!touch || stepIndex === sequence.length) {
+            if (!touch) {
                 reset();
+                return;
+            }
+
+            const endTime = performance.now();
+
+            if (stepIndex === sequence.length) {
+                clearTapDurationTimeout();
+                finishTap(touch, endTime);
                 return;
             }
 
@@ -366,7 +441,7 @@
                 {
                     x: touch.clientX,
                     y: touch.clientY,
-                    time: performance.now()
+                    time: endTime
                 }
             );
             const expectedDirection = sequence[stepIndex];
@@ -383,27 +458,13 @@
             lastStepCompletedAt = performance.now();
 
             if (stepIndex === sequence.length) {
-                // Only the final hidden step gets a non-passive listener. Preventing
-                // this touchstart avoids Safari's native callout cancelling the hold,
-                // while all ordinary page swipes remain on the passive fast path.
-                installHoldProtection();
+                // Only the armed final double tap uses a non-passive touchstart.
+                // This prevents Safari/Android double-tap zoom while every ordinary
+                // page swipe and tap remains on the passive fast path.
+                installTapProtection();
             }
 
             scheduleGapReset();
-        }
-
-        function handleContextMenu(event) {
-            const longPressIsArmed =
-                stepIndex === sequence.length && Boolean(activeTouch);
-
-            // Both final-stage guards are active only after all eight hidden swipes.
-            // Swipe listeners stay passive so ordinary scrolling remains unaffected.
-            if (
-                longPressIsArmed ||
-                performance.now() < suppressContextMenuUntil
-            ) {
-                event.preventDefault();
-            }
         }
 
         function handleVisibilityChange() {
@@ -416,7 +477,6 @@
         window.addEventListener("touchmove", handleTouchMove, passiveListener);
         window.addEventListener("touchend", handleTouchEnd, passiveListener);
         window.addEventListener("touchcancel", reset, passiveListener);
-        window.addEventListener("contextmenu", handleContextMenu, true);
         window.addEventListener("blur", reset);
         window.addEventListener("pagehide", reset, passiveListener);
         document.addEventListener("visibilitychange", handleVisibilityChange);
@@ -425,12 +485,10 @@
             reset,
             destroy() {
                 reset();
-                suppressContextMenuUntil = 0;
                 window.removeEventListener("touchstart", handleTouchStart, true);
                 window.removeEventListener("touchmove", handleTouchMove, true);
                 window.removeEventListener("touchend", handleTouchEnd, true);
                 window.removeEventListener("touchcancel", reset, true);
-                window.removeEventListener("contextmenu", handleContextMenu, true);
                 window.removeEventListener("blur", reset);
                 window.removeEventListener("pagehide", reset, true);
                 document.removeEventListener(
