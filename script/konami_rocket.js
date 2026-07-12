@@ -14,16 +14,7 @@
         "KeyA"
     ]);
 
-    const TOUCH_SEQUENCE = Object.freeze([
-        "up",
-        "up",
-        "down",
-        "down",
-        "left",
-        "right",
-        "left",
-        "right"
-    ]);
+    const LOGO_SELECTOR = 'header img[alt="Logo"]';
 
     const SCRIPT_URL = document.currentScript?.src || document.baseURI;
 
@@ -44,14 +35,10 @@
         reducedMotionMultiplier: 0.34,
         maxDevicePixelRatio: 2,
         imageLoadTimeout: 5000,
-        touchStepGap: 3000,
-        touchSwipeMinDistance: 52,
-        touchSwipeMaxDuration: 1200,
-        touchAxisDominance: 1.25,
-        touchTapMaxDuration: 350,
-        touchTapMoveTolerance: 18,
-        touchDoubleTapDelay: 500,
-        touchDoubleTapMaxDistance: 48
+        logoTapTargetCount: 7,
+        logoTapMaxGap: 500,
+        logoTapMaxDuration: 350,
+        logoTapMoveTolerance: 18
     });
 
     const FIREWORK_COLORS = Object.freeze([
@@ -143,86 +130,19 @@
         return null;
     }
 
-    function classifySwipe(start, end) {
-        const duration = end.time - start.time;
-        const deltaX = end.x - start.x;
-        const deltaY = end.y - start.y;
-        const absoluteX = Math.abs(deltaX);
-        const absoluteY = Math.abs(deltaY);
-
-        if (
-            duration <= 0 ||
-            duration > CONFIG.touchSwipeMaxDuration ||
-            Math.max(absoluteX, absoluteY) < CONFIG.touchSwipeMinDistance
-        ) {
-            return null;
-        }
-
-        if (absoluteY >= absoluteX * CONFIG.touchAxisDominance) {
-            return deltaY < 0 ? "up" : "down";
-        }
-
-        if (absoluteX >= absoluteY * CONFIG.touchAxisDominance) {
-            return deltaX < 0 ? "left" : "right";
-        }
-
-        return null;
+    function findLogoLink() {
+        const logoImage = document.querySelector(LOGO_SELECTOR);
+        return logoImage?.closest("a[href]") || null;
     }
 
-    function createTouchGestureRecognizer(sequence, onMatch, isBlocked) {
-        const passiveListener = { capture: true, passive: true };
-        const activeListener = { capture: true, passive: false };
-        let stepIndex = 0;
+    function createLogoTapRecognizer(logoLink, onMatch, isBlocked) {
+        const activeTouchListener = { capture: true, passive: false };
+        const passiveTouchListener = { capture: true, passive: true };
+        let tapCount = 0;
+        let lastTapCompletedAt = 0;
         let activeTouch = null;
-        let gapTimeoutId = 0;
         let tapDurationTimeoutId = 0;
-        let doubleTapTimeoutId = 0;
-        let lastStepCompletedAt = 0;
-        let firstTap = null;
-        let tapProtectionInstalled = false;
-
-        function handleArmedTapStart(event) {
-            if (
-                stepIndex === sequence.length &&
-                event.touches.length === 1 &&
-                !isBlocked()
-            ) {
-                event.preventDefault();
-            }
-        }
-
-        function installTapProtection() {
-            if (tapProtectionInstalled) {
-                return;
-            }
-
-            tapProtectionInstalled = true;
-            window.addEventListener(
-                "touchstart",
-                handleArmedTapStart,
-                activeListener
-            );
-        }
-
-        function removeTapProtection() {
-            if (!tapProtectionInstalled) {
-                return;
-            }
-
-            tapProtectionInstalled = false;
-            window.removeEventListener(
-                "touchstart",
-                handleArmedTapStart,
-                true
-            );
-        }
-
-        function clearGapTimeout() {
-            if (gapTimeoutId) {
-                window.clearTimeout(gapTimeoutId);
-                gapTimeoutId = 0;
-            }
-        }
+        let sequenceTimeoutId = 0;
 
         function clearTapDurationTimeout() {
             if (tapDurationTimeoutId) {
@@ -231,126 +151,87 @@
             }
         }
 
-        function clearDoubleTapTimeout() {
-            if (doubleTapTimeoutId) {
-                window.clearTimeout(doubleTapTimeoutId);
-                doubleTapTimeoutId = 0;
+        function clearSequenceTimeout() {
+            if (sequenceTimeoutId) {
+                window.clearTimeout(sequenceTimeoutId);
+                sequenceTimeoutId = 0;
             }
         }
 
         function reset() {
-            clearGapTimeout();
             clearTapDurationTimeout();
-            clearDoubleTapTimeout();
-            removeTapProtection();
-            stepIndex = 0;
+            clearSequenceTimeout();
+            tapCount = 0;
+            lastTapCompletedAt = 0;
             activeTouch = null;
-            lastStepCompletedAt = 0;
-            firstTap = null;
         }
 
-        function scheduleGapReset() {
-            clearGapTimeout();
-            gapTimeoutId = window.setTimeout(reset, CONFIG.touchStepGap);
-        }
-
-        function finishTap(touch, endTime) {
-            const tapStartTime = activeTouch.startTime;
-            const duration = endTime - tapStartTime;
-            const movement = Math.hypot(
-                touch.clientX - activeTouch.startX,
-                touch.clientY - activeTouch.startY
-            );
-            activeTouch = null;
-
-            if (
-                duration <= 0 ||
-                duration > CONFIG.touchTapMaxDuration ||
-                movement > CONFIG.touchTapMoveTolerance
-            ) {
-                reset();
-                return;
-            }
-
-            if (!firstTap) {
-                firstTap = {
-                    x: touch.clientX,
-                    y: touch.clientY,
-                    completedAt: endTime
-                };
-                clearGapTimeout();
-                doubleTapTimeoutId = window.setTimeout(
-                    reset,
-                    CONFIG.touchDoubleTapDelay
-                );
-                return;
-            }
-
-            const interval = tapStartTime - firstTap.completedAt;
-            const distance = Math.hypot(
-                touch.clientX - firstTap.x,
-                touch.clientY - firstTap.y
-            );
-
-            if (
-                interval < 0 ||
-                interval > CONFIG.touchDoubleTapDelay ||
-                distance > CONFIG.touchDoubleTapMaxDistance ||
-                isBlocked()
-            ) {
-                reset();
-                return;
-            }
-
+        function navigateHome() {
+            const destination = logoLink.href;
             reset();
-            onMatch();
+
+            if (destination) {
+                window.location.assign(destination);
+            }
         }
 
-        function handleTouchStart(event) {
+        function finishPendingSequence() {
             if (isBlocked()) {
                 reset();
                 return;
             }
 
-            // Multi-touch and overlapping touches are treated as interruptions.
+            if (tapCount === 1) {
+                navigateHome();
+                return;
+            }
+
+            reset();
+        }
+
+        function handleTouchStart(event) {
+            const now = performance.now();
+
             if (event.touches.length !== 1 || activeTouch) {
                 reset();
                 return;
             }
 
-            const now = performance.now();
+            if (isBlocked()) {
+                if (event.cancelable) {
+                    event.preventDefault();
+                }
 
-            if (
-                stepIndex > 0 &&
-                !firstTap &&
-                now - lastStepCompletedAt > CONFIG.touchStepGap
-            ) {
                 reset();
                 return;
             }
 
-            const touch = event.touches[0];
+            if (
+                tapCount > 0 &&
+                now - lastTapCompletedAt > CONFIG.logoTapMaxGap
+            ) {
+                const shouldNavigate = tapCount === 1;
+                reset();
 
-            if (stepIndex === sequence.length && firstTap) {
-                const tapInterval = now - firstTap.completedAt;
-                const tapDistance = Math.hypot(
-                    touch.clientX - firstTap.x,
-                    touch.clientY - firstTap.y
-                );
+                if (shouldNavigate) {
+                    if (event.cancelable) {
+                        event.preventDefault();
+                    }
 
-                if (
-                    tapInterval > CONFIG.touchDoubleTapDelay ||
-                    tapDistance > CONFIG.touchDoubleTapMaxDistance
-                ) {
-                    reset();
+                    navigateHome();
                     return;
                 }
-
-                clearDoubleTapTimeout();
-            } else {
-                clearGapTimeout();
             }
 
+            // The Logo alone owns this touch sequence. Preventing its default
+            // touchstart avoids mobile zoom and synthesized clicks; a genuine
+            // single tap is restored by navigateHome() after the short wait.
+            if (event.cancelable) {
+                event.preventDefault();
+            }
+
+            clearSequenceTimeout();
+            const touch = event.touches[0];
             activeTouch = {
                 identifier: touch.identifier,
                 startX: touch.clientX,
@@ -359,13 +240,10 @@
                 y: touch.clientY,
                 startTime: now
             };
-
-            if (stepIndex === sequence.length) {
-                tapDurationTimeoutId = window.setTimeout(
-                    reset,
-                    CONFIG.touchTapMaxDuration
-                );
-            }
+            tapDurationTimeoutId = window.setTimeout(
+                reset,
+                CONFIG.logoTapMaxDuration
+            );
         }
 
         function handleTouchMove(event) {
@@ -391,15 +269,13 @@
             activeTouch.x = touch.clientX;
             activeTouch.y = touch.clientY;
 
-            if (stepIndex === sequence.length) {
-                const movement = Math.hypot(
+            if (
+                Math.hypot(
                     activeTouch.x - activeTouch.startX,
                     activeTouch.y - activeTouch.startY
-                );
-
-                if (movement > CONFIG.touchTapMoveTolerance) {
-                    reset();
-                }
+                ) > CONFIG.logoTapMoveTolerance
+            ) {
+                reset();
             }
         }
 
@@ -408,7 +284,6 @@
                 return;
             }
 
-            // A remaining finger means the interaction was not a single-finger step.
             if (event.touches.length !== 0) {
                 reset();
                 return;
@@ -425,46 +300,38 @@
             }
 
             const endTime = performance.now();
-
-            if (stepIndex === sequence.length) {
-                clearTapDurationTimeout();
-                finishTap(touch, endTime);
-                return;
-            }
-
-            const direction = classifySwipe(
-                {
-                    x: activeTouch.startX,
-                    y: activeTouch.startY,
-                    time: activeTouch.startTime
-                },
-                {
-                    x: touch.clientX,
-                    y: touch.clientY,
-                    time: endTime
-                }
+            const duration = endTime - activeTouch.startTime;
+            const movement = Math.hypot(
+                touch.clientX - activeTouch.startX,
+                touch.clientY - activeTouch.startY
             );
-            const expectedDirection = sequence[stepIndex];
+            clearTapDurationTimeout();
             activeTouch = null;
 
-            // Mobile matching is deliberately strict: a wrong or ambiguous swipe
-            // resets to zero instead of reusing it as a possible new first step.
-            if (direction !== expectedDirection) {
+            if (
+                duration <= 0 ||
+                duration > CONFIG.logoTapMaxDuration ||
+                movement > CONFIG.logoTapMoveTolerance ||
+                isBlocked()
+            ) {
                 reset();
                 return;
             }
 
-            stepIndex += 1;
-            lastStepCompletedAt = performance.now();
+            tapCount += 1;
+            lastTapCompletedAt = endTime;
 
-            if (stepIndex === sequence.length) {
-                // Only the armed final double tap uses a non-passive touchstart.
-                // This prevents Safari/Android double-tap zoom while every ordinary
-                // page swipe and tap remains on the passive fast path.
-                installTapProtection();
+            if (tapCount === CONFIG.logoTapTargetCount) {
+                reset();
+                onMatch();
+                return;
             }
 
-            scheduleGapReset();
+            clearSequenceTimeout();
+            sequenceTimeoutId = window.setTimeout(
+                finishPendingSequence,
+                CONFIG.logoTapMaxGap
+            );
         }
 
         function handleVisibilityChange() {
@@ -473,22 +340,50 @@
             }
         }
 
-        window.addEventListener("touchstart", handleTouchStart, passiveListener);
-        window.addEventListener("touchmove", handleTouchMove, passiveListener);
-        window.addEventListener("touchend", handleTouchEnd, passiveListener);
-        window.addEventListener("touchcancel", reset, passiveListener);
+        logoLink.addEventListener(
+            "touchstart",
+            handleTouchStart,
+            activeTouchListener
+        );
+        logoLink.addEventListener(
+            "touchmove",
+            handleTouchMove,
+            passiveTouchListener
+        );
+        logoLink.addEventListener(
+            "touchend",
+            handleTouchEnd,
+            passiveTouchListener
+        );
+        logoLink.addEventListener(
+            "touchcancel",
+            reset,
+            passiveTouchListener
+        );
         window.addEventListener("blur", reset);
-        window.addEventListener("pagehide", reset, passiveListener);
+        window.addEventListener("pagehide", reset, passiveTouchListener);
         document.addEventListener("visibilitychange", handleVisibilityChange);
 
         return {
             reset,
             destroy() {
                 reset();
-                window.removeEventListener("touchstart", handleTouchStart, true);
-                window.removeEventListener("touchmove", handleTouchMove, true);
-                window.removeEventListener("touchend", handleTouchEnd, true);
-                window.removeEventListener("touchcancel", reset, true);
+                logoLink.removeEventListener(
+                    "touchstart",
+                    handleTouchStart,
+                    true
+                );
+                logoLink.removeEventListener(
+                    "touchmove",
+                    handleTouchMove,
+                    true
+                );
+                logoLink.removeEventListener(
+                    "touchend",
+                    handleTouchEnd,
+                    true
+                );
+                logoLink.removeEventListener("touchcancel", reset, true);
                 window.removeEventListener("blur", reset);
                 window.removeEventListener("pagehide", reset, true);
                 document.removeEventListener(
@@ -1297,9 +1192,9 @@
 
     function install() {
         const controller = createAnimationController();
-        let touchRecognizer = null;
+        let logoTapRecognizer = null;
         const playAnimation = () => {
-            touchRecognizer?.reset();
+            logoTapRecognizer?.reset();
             void controller.play();
         };
         const matcher = createSequenceMatcher(KEY_SEQUENCE, playAnimation);
@@ -1313,11 +1208,15 @@
         });
 
         if ("ontouchstart" in window || navigator.maxTouchPoints > 0) {
-            touchRecognizer = createTouchGestureRecognizer(
-                TOUCH_SEQUENCE,
-                playAnimation,
-                () => controller.isActive()
-            );
+            const logoLink = findLogoLink();
+
+            if (logoLink) {
+                logoTapRecognizer = createLogoTapRecognizer(
+                    logoLink,
+                    playAnimation,
+                    () => controller.isActive()
+                );
+            }
         }
     }
 
