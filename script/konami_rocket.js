@@ -22,7 +22,7 @@
     const ROCKET_IMAGE_SRC = new URL("../img/px_rocket.png", SCRIPT_URL).href;
 
     const CONFIG = Object.freeze({
-        overlayOpacity: 0.72,
+        overlayOpacity: 0.5,
         fadeInDuration: 320,
         rocketRevealDelay: 140,
         chargeDuration: 1300,
