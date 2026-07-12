@@ -445,10 +445,9 @@
         overlay.className = "konami-rocket-overlay";
         overlay.setAttribute("aria-hidden", "true");
         overlay.dataset.konamiRocketState = "charge";
-        overlay.style.setProperty(
-            "--konami-rocket-overlay-opacity",
-            String(CONFIG.overlayOpacity)
-        );
+
+        const backdrop = document.createElement("div");
+        backdrop.className = "konami-rocket-backdrop";
 
         const canvas = document.createElement("canvas");
         canvas.className = "konami-rocket-canvas";
@@ -466,10 +465,11 @@
         rocketImage.setAttribute("aria-hidden", "true");
 
         vehicle.append(glow, ionFlame, rocketImage);
-        overlay.append(canvas, vehicle);
+        overlay.append(backdrop, canvas, vehicle);
 
         return {
             overlay,
+            backdrop,
             canvas,
             vehicle,
             image: rocketImage
@@ -477,10 +477,7 @@
     }
 
     function createParticleEngine(canvas, reducedMotion) {
-        const context = canvas.getContext("2d", {
-            alpha: true,
-            desynchronized: true
-        });
+        const context = canvas.getContext("2d", { alpha: true });
 
         if (!context) {
             throw new Error("Canvas is unavailable.");
@@ -661,7 +658,8 @@
             }
         }
 
-        function draw() {
+        function draw(sceneOpacity = 1) {
+            const opacity = clamp(sceneOpacity);
             context.setTransform(1, 0, 0, 1, 0, 0);
             context.clearRect(0, 0, canvas.width, canvas.height);
             context.setTransform(
@@ -690,7 +688,7 @@
                     gradient.addColorStop(0, "rgba(255,255,255,0.95)");
                     gradient.addColorStop(0.18, particle.color);
                     gradient.addColorStop(1, "rgba(0,0,0,0)");
-                    context.globalAlpha = remaining;
+                    context.globalAlpha = remaining * opacity;
                     context.fillStyle = gradient;
                     context.beginPath();
                     context.arc(particle.x, particle.y, radius, 0, Math.PI * 2);
@@ -703,7 +701,7 @@
                 context.shadowColor = particle.color;
 
                 if (particle.type === "firework") {
-                    context.globalAlpha = Math.pow(remaining, 1.4);
+                    context.globalAlpha = Math.pow(remaining, 1.4) * opacity;
                     context.shadowBlur = 9 * remaining;
                     context.lineWidth = Math.max(0.6, particle.size * remaining);
                     context.beginPath();
@@ -714,7 +712,7 @@
                     );
                     context.stroke();
                 } else if (particle.type === "ion") {
-                    context.globalAlpha = Math.pow(remaining, 1.7);
+                    context.globalAlpha = Math.pow(remaining, 1.7) * opacity;
                     context.shadowBlur = 12 * remaining;
                     context.beginPath();
                     context.ellipse(
@@ -728,7 +726,8 @@
                     );
                     context.fill();
                 } else {
-                    context.globalAlpha = Math.pow(remaining, 1.5) * 0.8;
+                    context.globalAlpha =
+                        Math.pow(remaining, 1.5) * 0.8 * opacity;
                     context.shadowBlur = 8 * remaining;
                     context.beginPath();
                     context.arc(
@@ -960,7 +959,9 @@
                         );
                 }
 
-                run.scene.overlay.style.opacity = overlayOpacity.toFixed(3);
+                run.scene.backdrop.style.opacity = (
+                    CONFIG.overlayOpacity * overlayOpacity
+                ).toFixed(3);
 
                 const layout = run.layout;
                 let centerX = layout.startX;
@@ -1087,10 +1088,10 @@
                 run.scene.vehicle.style.opacity =
                     elapsed >= launchEnd
                         ? "0"
-                        : rocketRevealProgress.toFixed(3);
+                        : (rocketRevealProgress * overlayOpacity).toFixed(3);
 
                 run.particleEngine.update(deltaSeconds);
-                run.particleEngine.draw();
+                run.particleEngine.draw(overlayOpacity);
 
                 if (elapsed >= finishTime) {
                     cleanup(run);
