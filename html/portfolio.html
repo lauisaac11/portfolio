@@ -4,25 +4,35 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>劉俊興 作品集</title>
+    <meta name="description" content="瀏覽劉俊興的形象設計、海報設計、標案設計與文字設計作品。">
+    <meta name="theme-color" content="#a062e9">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="zh_TW">
+    <meta property="og:title" content="作品集｜劉俊興視覺設計">
+    <meta property="og:description" content="瀏覽形象、海報、標案與文字設計作品。">
+    <meta property="og:url" content="https://lauisaac11.github.io/portfolio/html/portfolio.html">
+    <link rel="canonical" href="https://lauisaac11.github.io/portfolio/html/portfolio.html">
+    <link rel="icon" href="../img/my_logo.png" type="image/png">
+    <title>作品集｜劉俊興視覺設計</title>
     <link rel="stylesheet" href="../css/css.css">
     <link rel="stylesheet" href="../css/nav.css">
     <link rel="stylesheet" href="../css/px_spaceship.css">
+    <link rel="stylesheet" href="../css/particles.css">
     <link rel="stylesheet" href="../css/back_to_top.css">
     <link rel="stylesheet" href="../css/konami_rocket.css?v=20260712-ios-backdrop">
-
 </head>
 
-
 <body>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
     <header>
-        <a href="../index.html">
-            <img src="../img/my_logo.png" alt="Logo">
+        <!-- 保留 alt="Logo"：手機版七連點彩蛋以此作為觸發目標。 -->
+        <a href="../index.html" aria-label="前往作品集首頁">
+            <img src="../img/my_logo.png" alt="Logo" width="68" height="63">
         </a>
-        <nav>
-            <input type="checkbox" id="nav-checkbox">
-            <label for="nav-checkbox" class="menu-toggle">
+        <nav aria-label="主要導覽">
+            <input type="checkbox" id="nav-checkbox" aria-label="切換導覽選單">
+            <label for="nav-checkbox" class="menu-toggle" aria-label="開啟或關閉導覽選單">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -31,7 +41,7 @@
                 <li><a href="../index.html">首頁</a></li>
                 <li><a href="introduction.html">關於我</a></li>
                 <li class="dropdown">
-                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
+                    <a href="javascript:void(0)" aria-current="page" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
                     <ul class="dropdown-content">
                         <li><a href="portfolio.html">全部作品</a></li>
                         <li><a href="portfolio/ip_design.html">形象設計</a></li>
@@ -44,18 +54,17 @@
         </nav>
     </header>
 
-    <main style="flex: 1;">
+    <main id="main-content" style="flex: 1;">
         <div class="logo-type-container">
-            <img src="../img/protfolio_logotype.webp" alt="Portfolio Title">
+            <img src="../img/protfolio_logotype.webp" alt="作品集">
         </div>
 
         <div class="portfolio-container">
-
             <div class="card">
                 <div class="card-top">
                     <img style="width: 177px; height: 205px;" src="../img/macarons_px.webp" alt="形象設計">
                 </div>
-                <button class="card-btn" onclick="location.href='portfolio/ip_design.html'">
+                <button class="card-btn" type="button" onclick="location.href='portfolio/ip_design.html'">
                     <div class="btn-inner"><span>形象設計</span></div>
                 </button>
             </div>
@@ -64,7 +73,7 @@
                 <div class="card-top">
                     <img style="width: 152px; height: 205px;" src="../img/poster_design185X205.webp" alt="海報設計">
                 </div>
-                <button class="card-btn" onclick="location.href='portfolio/poster_design.html'">
+                <button class="card-btn" type="button" onclick="location.href='portfolio/poster_design.html'">
                     <div class="btn-inner"><span>海報設計</span></div>
                 </button>
             </div>
@@ -73,7 +82,7 @@
                 <div class="card-top">
                     <img style="width: 185px; height: 205px;" src="../img/tender_design.webp" alt="標案設計">
                 </div>
-                <button class="card-btn" onclick="location.href='portfolio/tender_design.html'">
+                <button class="card-btn" type="button" onclick="location.href='portfolio/tender_design.html'">
                     <div class="btn-inner"><span>標案設計</span></div>
                 </button>
             </div>
@@ -82,29 +91,29 @@
                 <div class="card-top">
                     <img style="width: 92px; height: 205px;" src="../img/text_design92X205.webp" alt="文字設計">
                 </div>
-                <button class="card-btn" onclick="location.href='portfolio/text_design.html'">
+                <button class="card-btn" type="button" onclick="location.href='portfolio/text_design.html'">
                     <div class="btn-inner"><span>文字設計</span></div>
                 </button>
             </div>
-
         </div>
     </main>
 
-    <div class="space-container">
-        <img class="looping-ship" src="../img/px_spaceship.gif" alt="px_spaceship">
+    <div class="space-container" aria-hidden="true">
+        <img class="looping-ship" src="../img/px_spaceship.gif" alt="">
     </div>
 
-    <img class="bottom-building" src="../img/169426.webp" alt="Decor">
+    <img class="bottom-building" src="../img/169426.webp" alt="" aria-hidden="true" width="1920" height="200">
 
     <footer>
-        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
-            <img style="width: 45px; height: 45px;" src="../img/fb_logo45X45.png" alt="FB_logo">
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW" target="_blank" rel="noopener noreferrer" aria-label="Facebook（在新分頁開啟）">
+            <img width="45" height="45" src="../img/fb_logo45X45.png" alt="">
         </a>
-        <a href="https://www.threads.com/@junxing0613">
-            <img style="width: 45px; height: 45px;" src="../img/threads_logo45X45.png" alt="threads_logo">
+        <a href="https://www.threads.com/@junxing0613" target="_blank" rel="noopener noreferrer" aria-label="Threads（在新分頁開啟）">
+            <img width="45" height="45" src="../img/threads_logo45X45.png" alt="">
         </a>
     </footer>
 
+    <script src="../script/particles.js"></script>
     <script src="../script/back_to_top.js"></script>
     <script src="../script/konami_rocket.js?v=20260712-ios-backdrop" defer></script>
 </body>

@@ -1,115 +1,196 @@
-const canvas = document.getElementById("particleCanvas");
-const ctx = canvas.getContext("2d");
+(() => {
+    "use strict";
 
-// 取消抗鋸齒，保留像素的銳利邊緣
-ctx.imageSmoothingEnabled = false;
+    const canvas = document.getElementById("particleCanvas");
 
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-let particlesArray = [];
-let mouse = {
-    x: null,
-    y: null,
-    radius: 120
-}
-
-window.addEventListener('mousemove', function(event) {
-    mouse.x = event.x;
-    mouse.y = event.y;
-});
-
-window.addEventListener('mouseout', function() {
-    mouse.x = null;
-    mouse.y = null;
-});
-
-window.addEventListener('resize', function() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    ctx.imageSmoothingEnabled = false; // 調整尺寸後需再次設置
-    init();
-});
-
-class Particle {
-    constructor(x, y, directionX, directionY, size, color) {
-        this.x = x;
-        this.y = y;
-        this.directionX = directionX;
-        this.directionY = directionY;
-        this.size = size;
-        this.color = color;
+    if (!(canvas instanceof HTMLCanvasElement)) {
+        return;
     }
-    
-    draw() {
-        ctx.fillStyle = this.color;
-        // 改回平滑移動，只做基礎捨去小數點，避免人為刻意的跳動卡頓感
-        ctx.fillRect(Math.floor(this.x), Math.floor(this.y), this.size, this.size);
+
+    const context = canvas.getContext("2d", { alpha: true });
+
+    if (!context) {
+        return;
     }
-    
-    update() {
-        this.x += this.directionX;
-        this.y += this.directionY;
-        
-        // 碰到邊界直接穿梭到另一面（復古遊戲場景特徵），而不是反彈
-        if (this.x > canvas.width) this.x = 0;
-        if (this.x < 0) this.x = canvas.width;
-        if (this.y > canvas.height) this.y = 0;
-        if (this.y < 0) this.y = canvas.height;
-        
-        // 鼠標推開效果 (魔法干擾區)
-        if (mouse.x != null && mouse.y != null) {
-            let dx = mouse.x - this.x;
-            let dy = mouse.y - this.y;
-            let distance = Math.sqrt(dx * dx + dy * dy);
-            if (distance < mouse.radius) {
-                const forceDirectionX = dx / distance;
-                const forceDirectionY = dy / distance;
-                const force = (mouse.radius - distance) / mouse.radius;
-                // 鼠標排斥力加快一點，讓像素被彈開的感覺更活潑
-                this.x -= forceDirectionX * force * 4;
-                this.y -= forceDirectionY * force * 4;
+
+    const reducedMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const particleSizes = [4, 8, 12];
+    const particleAlphas = [0.15, 0.3, 0.6];
+    const pointer = { x: null, y: null, radius: 120 };
+
+    let width = 0;
+    let height = 0;
+    let particles = [];
+    let animationFrameId = 0;
+    let resizeFrameId = 0;
+
+    class Particle {
+        constructor(x, y, velocityX, velocityY, size, color) {
+            this.x = x;
+            this.y = y;
+            this.velocityX = velocityX;
+            this.velocityY = velocityY;
+            this.size = size;
+            this.color = color;
+        }
+
+        draw() {
+            context.fillStyle = this.color;
+            context.fillRect(
+                Math.floor(this.x),
+                Math.floor(this.y),
+                this.size,
+                this.size
+            );
+        }
+
+        update() {
+            this.x += this.velocityX;
+            this.y += this.velocityY;
+
+            if (this.x > width) this.x = 0;
+            if (this.x < 0) this.x = width;
+            if (this.y > height) this.y = 0;
+            if (this.y < 0) this.y = height;
+
+            if (pointer.x !== null && pointer.y !== null) {
+                const deltaX = pointer.x - this.x;
+                const deltaY = pointer.y - this.y;
+                const distance = Math.hypot(deltaX, deltaY);
+
+                if (distance > 0 && distance < pointer.radius) {
+                    const force = (pointer.radius - distance) / pointer.radius;
+                    this.x -= (deltaX / distance) * force * 4;
+                    this.y -= (deltaY / distance) * force * 4;
+                }
+            }
+
+            this.draw();
+        }
+    }
+
+    function configureCanvas() {
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = width;
+        canvas.height = height;
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.imageSmoothingEnabled = false;
+    }
+
+    function createParticles() {
+        const mobileMultiplier = width < 600 ? 0.65 : 1;
+        const motionMultiplier = reducedMotionQuery.matches ? 0.4 : 1;
+        const count = Math.max(
+            16,
+            Math.min(
+                180,
+                Math.round((width * height) / 12000 * mobileMultiplier * motionMultiplier)
+            )
+        );
+
+        particles = Array.from({ length: count }, () => {
+            const size = particleSizes[Math.floor(Math.random() * particleSizes.length)];
+            const alpha = particleAlphas[Math.floor(Math.random() * particleAlphas.length)];
+
+            return new Particle(
+                Math.random() * width,
+                Math.random() * height,
+                Math.random() * 0.4 - 0.2,
+                Math.random() * 0.3 + 0.1,
+                size,
+                `rgba(255, 255, 255, ${alpha})`
+            );
+        });
+    }
+
+    function drawParticles(shouldUpdate) {
+        context.clearRect(0, 0, width, height);
+
+        for (const particle of particles) {
+            if (shouldUpdate) {
+                particle.update();
+            } else {
+                particle.draw();
             }
         }
-        
-        this.draw();
     }
-}
 
-function init() {
-    particlesArray = [];
-    // 數量調回來一點，因為去掉了連線，需要更多方塊點綴
-    let numberOfParticles = (canvas.height * canvas.width) / 12000;
-    
-    // 預設復古方塊尺寸，限制為特定比例 (例如 4, 8, 12 px)
-    const sizes = [4, 8, 12];
-    const alphas = [0.15, 0.3, 0.6]; // 三種層級的透明度，營造遠近景
-    
-    for (let i = 0; i < numberOfParticles; i++) {
-        let size = sizes[Math.floor(Math.random() * sizes.length)];
-        let x = Math.random() * canvas.width;
-        let y = Math.random() * canvas.height;
-        
-        // 給他們一致的緩慢漂移方向（有點像斜落下的數位雪花 / 星空）
-        let directionX = (Math.random() * 0.4) - 0.2; 
-        let directionY = (Math.random() * 0.3) + 0.1; // 大部分往下掉
-        
-        let alpha = alphas[Math.floor(Math.random() * alphas.length)];
-        let color = `rgba(255, 255, 255, ${alpha})`;
-        
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+    function stopAnimation() {
+        if (animationFrameId) {
+            window.cancelAnimationFrame(animationFrameId);
+            animationFrameId = 0;
+        }
     }
-}
 
-function animate() {
-    requestAnimationFrame(animate);
-    // 可加點殘影或直接刷清
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    
-    for (let i = 0; i < particlesArray.length; i++) {
-        particlesArray[i].update();
+    function animate() {
+        drawParticles(true);
+        animationFrameId = window.requestAnimationFrame(animate);
     }
-}
 
-init();
-animate();
+    function startAnimation() {
+        stopAnimation();
+
+        if (reducedMotionQuery.matches) {
+            drawParticles(false);
+            return;
+        }
+
+        if (!document.hidden) {
+            animate();
+        }
+    }
+
+    function rebuildScene() {
+        configureCanvas();
+        createParticles();
+        startAnimation();
+    }
+
+    function handleResize() {
+        if (resizeFrameId) {
+            window.cancelAnimationFrame(resizeFrameId);
+        }
+
+        resizeFrameId = window.requestAnimationFrame(() => {
+            resizeFrameId = 0;
+            rebuildScene();
+        });
+    }
+
+    function handleMotionPreferenceChange() {
+        createParticles();
+        startAnimation();
+    }
+
+    window.addEventListener("mousemove", (event) => {
+        pointer.x = event.clientX;
+        pointer.y = event.clientY;
+    }, { passive: true });
+
+    window.addEventListener("mouseout", () => {
+        pointer.x = null;
+        pointer.y = null;
+    }, { passive: true });
+
+    window.addEventListener("resize", handleResize, { passive: true });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            stopAnimation();
+        } else {
+            startAnimation();
+        }
+    });
+
+    window.addEventListener("pagehide", stopAnimation);
+    window.addEventListener("pageshow", startAnimation);
+
+    if (typeof reducedMotionQuery.addEventListener === "function") {
+        reducedMotionQuery.addEventListener("change", handleMotionPreferenceChange);
+    } else {
+        reducedMotionQuery.addListener(handleMotionPreferenceChange);
+    }
+
+    rebuildScene();
+})();

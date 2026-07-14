@@ -1,0 +1,523 @@
+/* 作品照片內頁專用：無背板的漸進增強 3D 輪播。 */
+.portfolio-gallery-body {
+    --portfolio-gallery-ink: #17203d;
+    --portfolio-gallery-cyan: #58ddff;
+    --portfolio-gallery-pink: #ff7bf3;
+    --portfolio-gallery-yellow: #ffdb4a;
+    --portfolio-gallery-line: rgba(23, 32, 61, 0.88);
+    color: var(--portfolio-gallery-ink);
+    font-family: "cubic_11", sans-serif;
+}
+
+.portfolio-gallery-body main {
+    flex: 1;
+    min-width: 0;
+}
+
+.portfolio-gallery-body a:focus-visible,
+.portfolio-gallery-body button:focus-visible {
+    outline: 3px solid var(--portfolio-gallery-yellow);
+    outline-offset: 4px;
+}
+
+.portfolio-gallery-skip-link {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    padding: 10px 14px;
+    border: 3px solid var(--portfolio-gallery-ink);
+    border-radius: 12px;
+    color: var(--portfolio-gallery-ink);
+    background: #ffffff;
+    text-decoration: none;
+    transform: translateY(-180%);
+    transition: transform 160ms ease;
+}
+
+.portfolio-gallery-skip-link:focus {
+    transform: translateY(0);
+}
+
+.portfolio-gallery {
+    box-sizing: border-box;
+    width: min(100%, 1440px);
+    margin: 0 auto;
+    padding: clamp(28px, 5vw, 64px) clamp(14px, 4vw, 52px) 56px;
+}
+
+.portfolio-gallery__heading {
+    width: min(100%, 760px);
+    margin: 0 auto clamp(18px, 3vw, 34px);
+    text-align: center;
+}
+
+.portfolio-gallery__eyebrow {
+    display: inline-flex;
+    margin: 0 0 12px;
+    padding: 7px 13px;
+    border: 3px solid var(--portfolio-gallery-line);
+    border-radius: 999px;
+    color: var(--portfolio-gallery-ink);
+    background: var(--portfolio-gallery-yellow);
+    font-size: clamp(0.86rem, 1.4vw, 1rem);
+    letter-spacing: 0.08em;
+}
+
+.portfolio-gallery__heading h1 {
+    margin: 0;
+    color: #ffffff;
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    line-height: 0.96;
+    letter-spacing: 0.04em;
+    text-shadow:
+        4px 4px 0 var(--portfolio-gallery-ink),
+        0 12px 28px rgba(23, 32, 61, 0.25);
+}
+
+.portfolio-gallery__hint {
+    margin: 18px auto 0;
+    color: var(--portfolio-gallery-ink);
+    font-size: clamp(0.92rem, 1.7vw, 1.08rem);
+    line-height: 1.7;
+}
+
+/* 無 JavaScript 時維持清楚、可開啟原圖的無背板作品清單。 */
+.portfolio-gallery-carousel__stage {
+    touch-action: pan-y pinch-zoom;
+}
+
+.portfolio-gallery-carousel__list {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 28px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+.portfolio-gallery-carousel__slide {
+    min-width: 0;
+}
+
+.portfolio-gallery-carousel__artwork {
+    position: relative;
+    display: flex;
+    width: 100%;
+    min-height: 260px;
+    align-items: center;
+    justify-content: center;
+    color: inherit;
+    background: transparent;
+    text-decoration: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+.portfolio-gallery-carousel__image {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 18px 18px rgba(23, 32, 61, 0.26));
+    pointer-events: none;
+    -webkit-user-drag: none;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+.portfolio-gallery-carousel__number {
+    position: absolute;
+    right: 8px;
+    bottom: 8px;
+    z-index: 2;
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 32px;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 5px 9px;
+    border: 2px solid var(--portfolio-gallery-line);
+    border-radius: 999px;
+    color: var(--portfolio-gallery-ink);
+    background: var(--portfolio-gallery-yellow);
+    font-size: 0.9rem;
+    line-height: 1;
+}
+
+/* JavaScript 啟用後才建立 3D 堆疊，避免腳本失敗時照片消失。 */
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__stage {
+    position: relative;
+    height: clamp(360px, 66vh, 680px);
+    overflow: hidden;
+    perspective: 1500px;
+    perspective-origin: 50% 48%;
+}
+
+@supports (overflow: clip) {
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__stage {
+        overflow: clip;
+    }
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__list {
+    position: absolute;
+    inset: 0;
+    display: block;
+    transform-style: preserve-3d;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(78vw, 760px);
+    height: clamp(280px, 58vh, 580px);
+    opacity: 0;
+    visibility: hidden;
+    transform: translate3d(-50%, -50%, -520px) scale(0.38);
+    transform-origin: center;
+    transition:
+        transform 620ms cubic-bezier(0.22, 0.72, 0.16, 1),
+        opacity 420ms ease,
+        visibility 0s linear 620ms;
+    pointer-events: none;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__artwork {
+    height: 100%;
+    min-height: 0;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="active"] {
+    z-index: 5;
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(-50%, -50%, 90px) rotateY(0deg) scale(1);
+    transition-delay: 0s;
+    pointer-events: auto;
+    will-change: transform, opacity;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous"] {
+    z-index: 4;
+    opacity: 0.66;
+    visibility: visible;
+    transform:
+        translate3d(calc(-50% - clamp(190px, 31vw, 460px)), -50%, -140px)
+        rotateY(42deg)
+        scale(0.72);
+    transition-delay: 0s;
+    pointer-events: auto;
+    will-change: transform, opacity;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next"] {
+    z-index: 4;
+    opacity: 0.66;
+    visibility: visible;
+    transform:
+        translate3d(calc(-50% + clamp(190px, 31vw, 460px)), -50%, -140px)
+        rotateY(-42deg)
+        scale(0.72);
+    transition-delay: 0s;
+    pointer-events: auto;
+    will-change: transform, opacity;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous-far"] {
+    z-index: 2;
+    opacity: 0.2;
+    visibility: visible;
+    transform:
+        translate3d(calc(-50% - clamp(285px, 46vw, 680px)), -50%, -330px)
+        rotateY(55deg)
+        scale(0.5);
+    transition-delay: 0s;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next-far"] {
+    z-index: 2;
+    opacity: 0.2;
+    visibility: visible;
+    transform:
+        translate3d(calc(-50% + clamp(285px, 46vw, 680px)), -50%, -330px)
+        rotateY(-55deg)
+        scale(0.5);
+    transition-delay: 0s;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="hidden"] {
+    z-index: 0;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide:not([data-position="active"]) .portfolio-gallery-carousel__number {
+    opacity: 0;
+}
+
+.portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="active"] .portfolio-gallery-carousel__image {
+    filter: drop-shadow(0 22px 24px rgba(23, 32, 61, 0.34));
+}
+
+.portfolio-gallery-carousel__controls {
+    display: grid;
+    grid-template-columns: minmax(118px, auto) minmax(170px, 1fr) minmax(118px, auto);
+    gap: 14px;
+    width: min(100%, 760px);
+    margin: 18px auto 0;
+    align-items: center;
+}
+
+.portfolio-gallery-carousel__button,
+.portfolio-gallery-carousel__status {
+    min-height: 48px;
+    box-sizing: border-box;
+    border: 3px solid var(--portfolio-gallery-line);
+    border-radius: 14px;
+    color: var(--portfolio-gallery-ink);
+    font: inherit;
+}
+
+.portfolio-gallery-carousel__button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 9px 14px;
+    background: var(--portfolio-gallery-cyan);
+    box-shadow: 4px 4px 0 var(--portfolio-gallery-line);
+    cursor: pointer;
+    transition:
+        transform 150ms ease,
+        box-shadow 150ms ease,
+        background-color 150ms ease;
+    touch-action: manipulation;
+}
+
+.portfolio-gallery-carousel__button:last-child {
+    background: var(--portfolio-gallery-pink);
+}
+
+.portfolio-gallery-carousel__button:active {
+    transform: translate(3px, 3px);
+    box-shadow: 1px 1px 0 var(--portfolio-gallery-line);
+}
+
+.portfolio-gallery-carousel__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0;
+    padding: 8px 12px;
+    background: rgba(255, 255, 255, 0.72);
+    text-align: center;
+    line-height: 1.45;
+}
+
+/* 預覽層刻意低於 Konami 彩蛋，且不改寫頁面的 overflow 狀態。 */
+.portfolio-gallery-body .preview-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: grid;
+    box-sizing: border-box;
+    padding: clamp(58px, 8vw, 88px) clamp(16px, 4vw, 48px) 28px;
+    place-items: center;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: rgba(7, 10, 25, 0.88);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        opacity 220ms ease,
+        visibility 0s linear 220ms;
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+}
+
+.portfolio-gallery-body .preview-modal.is-active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition-delay: 0s;
+}
+
+.portfolio-gallery-body .preview-content {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(94vw, 1500px);
+    max-height: 86vh;
+    object-fit: contain;
+    transform: scale(0.96);
+    transition: transform 220ms ease;
+}
+
+.portfolio-gallery-body .preview-modal.is-active .preview-content {
+    transform: scale(1);
+}
+
+.portfolio-gallery-body .close-preview {
+    position: fixed;
+    top: max(16px, env(safe-area-inset-top));
+    right: max(16px, env(safe-area-inset-right));
+    display: inline-flex;
+    width: 48px;
+    height: 48px;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.78);
+    border-radius: 50%;
+    color: #ffffff;
+    background: rgba(23, 32, 61, 0.72);
+    font: 700 2rem/1 sans-serif;
+    cursor: pointer;
+    touch-action: manipulation;
+}
+
+.portfolio-gallery-body .preview-error {
+    max-width: 34rem;
+    margin: 0;
+    color: #ffffff;
+    font-size: 1rem;
+    line-height: 1.6;
+    text-align: center;
+}
+
+.portfolio-gallery-body .preview-error[hidden] {
+    display: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous"]:hover,
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next"]:hover {
+        opacity: 0.86;
+    }
+
+    .portfolio-gallery-carousel__button:hover {
+        background: var(--portfolio-gallery-yellow);
+        transform: translate(-2px, -2px);
+        box-shadow: 6px 6px 0 var(--portfolio-gallery-line);
+    }
+}
+
+@media (max-width: 700px) {
+    .portfolio-gallery {
+        padding-inline: 10px;
+    }
+
+    .portfolio-gallery__heading {
+        padding-inline: 12px;
+        box-sizing: border-box;
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__stage {
+        height: clamp(330px, 60vh, 520px);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide {
+        width: min(76vw, 430px);
+        height: clamp(270px, 53vh, 460px);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous"] {
+        transform: translate3d(calc(-50% - 42vw), -50%, -150px) rotateY(43deg) scale(0.7);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next"] {
+        transform: translate3d(calc(-50% + 42vw), -50%, -150px) rotateY(-43deg) scale(0.7);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous-far"],
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next-far"] {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+    }
+
+    .portfolio-gallery-carousel__controls {
+        grid-template-columns: 1fr 1fr;
+        width: calc(100% - 20px);
+    }
+
+    .portfolio-gallery-carousel__status {
+        grid-column: 1 / -1;
+        grid-row: 1;
+    }
+
+    .portfolio-gallery-carousel__button:first-child {
+        grid-column: 1;
+        grid-row: 2;
+    }
+
+    .portfolio-gallery-carousel__button:last-child {
+        grid-column: 2;
+        grid-row: 2;
+    }
+}
+
+@media (max-height: 560px) and (orientation: landscape) {
+    .portfolio-gallery {
+        padding-top: 18px;
+    }
+
+    .portfolio-gallery__heading {
+        margin-bottom: 8px;
+    }
+
+    .portfolio-gallery__eyebrow,
+    .portfolio-gallery__hint {
+        display: none;
+    }
+
+    .portfolio-gallery__heading h1 {
+        font-size: clamp(2rem, 8vh, 3.2rem);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__stage {
+        height: clamp(230px, 55vh, 320px);
+    }
+
+    .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide {
+        width: min(58vw, 620px);
+        height: clamp(190px, 50vh, 290px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .portfolio-gallery-body .portfolio-gallery-skip-link,
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide,
+    .portfolio-gallery-body .portfolio-gallery-carousel__button,
+    .portfolio-gallery-body .preview-modal,
+    .portfolio-gallery-body .preview-content {
+        transition: none;
+    }
+
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous"] {
+        transform: translate3d(calc(-50% - clamp(190px, 31vw, 460px)), -50%, -140px) scale(0.72);
+    }
+
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next"] {
+        transform: translate3d(calc(-50% + clamp(190px, 31vw, 460px)), -50%, -140px) scale(0.72);
+    }
+
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous-far"],
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next-far"] {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
+
+@media (max-width: 700px) and (prefers-reduced-motion: reduce) {
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="previous"] {
+        transform: translate3d(calc(-50% - 42vw), -50%, -150px) scale(0.7);
+    }
+
+    .portfolio-gallery-body .portfolio-gallery-carousel.is-enhanced .portfolio-gallery-carousel__slide[data-position="next"] {
+        transform: translate3d(calc(-50% + 42vw), -50%, -150px) scale(0.7);
+    }
+}

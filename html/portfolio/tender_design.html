@@ -4,24 +4,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>劉俊興 作品集</title>
+    <meta name="description" content="瀏覽劉俊興的標案設計作品。">
+    <meta name="theme-color" content="#a062e9">
+    <link rel="canonical" href="https://lauisaac11.github.io/portfolio/html/portfolio/tender_design.html">
+    <link rel="icon" href="../../img/my_logo.png" type="image/png">
+    <title>標案設計｜劉俊興作品集</title>
     <link rel="stylesheet" href="../../css/tender_grid.css">
     <link rel="stylesheet" href="../../css/nav.css">
     <link rel="stylesheet" href="../../css/css.css">
+    <link rel="stylesheet" href="../../css/portfolio_gallery_carousel.css">
+    <link rel="stylesheet" href="../../css/particles.css">
     <link rel="stylesheet" href="../../css/back_to_top.css">
     <link rel="stylesheet" href="../../css/konami_rocket.css?v=20260712-ios-backdrop">
 </head>
 
-<body>
+<body class="portfolio-gallery-body">
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <a class="portfolio-gallery-skip-link" href="#main-content">跳至主要內容</a>
 
     <header>
-        <a href="../../index.html">
-            <img src="../../img/my_logo.png" alt="Logo"
-                onerror="this.src='https://via.placeholder.com/68x63?text=Logo'">
+        <!-- 保留 alt="Logo"：手機版七連點彩蛋以此作為觸發目標。 -->
+        <a href="../../index.html" aria-label="前往作品集首頁">
+            <img src="../../img/my_logo.png" alt="Logo" width="68" height="63">
         </a>
-        <nav>
-            <input type="checkbox" id="nav-checkbox">
-            <label for="nav-checkbox" class="menu-toggle">
+        <nav aria-label="主要導覽">
+            <input type="checkbox" id="nav-checkbox" aria-label="切換導覽選單">
+            <label for="nav-checkbox" class="menu-toggle" aria-label="開啟或關閉導覽選單">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -35,7 +43,7 @@
                         <li><a href="../portfolio.html">全部作品</a></li>
                         <li><a href="ip_design.html">形象設計</a></li>
                         <li><a href="poster_design.html">海報設計</a></li>
-                        <li><a href="tender_design.html">標案設計</a></li>
+                        <li><a href="tender_design.html" aria-current="page">標案設計</a></li>
                         <li><a href="text_design.html">文字設計</a></li>
                     </ul>
                 </li>
@@ -43,78 +51,261 @@
         </nav>
     </header>
 
-    <main>
-        <div class="folder-grid">
-            <div class="folder-card" data-preview="../../img/tender_design/152375.webp">
-                <div class="folder-number">01</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152375.webp" alt="標案設計1" class="folder-img">
+    <main id="main-content">
+        <section class="portfolio-gallery" data-portfolio-gallery aria-labelledby="tender_design-gallery-title">
+            <div class="portfolio-gallery__heading">
+                <p class="portfolio-gallery__eyebrow">作品分類／標案設計</p>
+                <h1 id="tender_design-gallery-title">標案設計</h1>
+                <p class="portfolio-gallery__hint" id="tender_design-gallery-hint">
+                    點選中央作品可放大檢視。 使用左右按鈕、鍵盤方向鍵或手機橫向滑動切換。
+                </p>
             </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152376.webp">
-                <div class="folder-number">02</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152376.webp" alt="標案設計2" class="folder-img">
+
+            <div class="portfolio-gallery-carousel"
+                 data-gallery-carousel
+                 role="region"
+                 aria-roledescription="輪播"
+                 aria-labelledby="tender_design-gallery-title"
+                 aria-describedby="tender_design-gallery-hint tender_design-gallery-status">
+                <div class="portfolio-gallery-carousel__stage" data-gallery-stage>
+                    <ol class="portfolio-gallery-carousel__list">
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品一"
+                        aria-label="第 1 張，共 10 張：標案設計作品一">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152375.webp"
+                           aria-label="放大檢視：標案設計作品一">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">01</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152375.webp"
+                                 alt="標案設計作品一"
+                                 loading="eager" fetchpriority="high"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品二"
+                        aria-label="第 2 張，共 10 張：標案設計作品二">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152376.webp"
+                           aria-label="放大檢視：標案設計作品二">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">02</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152376.webp"
+                                 alt="標案設計作品二"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品三"
+                        aria-label="第 3 張，共 10 張：標案設計作品三">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152377.webp"
+                           aria-label="放大檢視：標案設計作品三">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">03</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152377.webp"
+                                 alt="標案設計作品三"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品四"
+                        aria-label="第 4 張，共 10 張：標案設計作品四">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152378.webp"
+                           aria-label="放大檢視：標案設計作品四">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">04</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152378.webp"
+                                 alt="標案設計作品四"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品五"
+                        aria-label="第 5 張，共 10 張：標案設計作品五">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152380.webp"
+                           aria-label="放大檢視：標案設計作品五">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">05</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152380.webp"
+                                 alt="標案設計作品五"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品六"
+                        aria-label="第 6 張，共 10 張：標案設計作品六">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152381.webp"
+                           aria-label="放大檢視：標案設計作品六">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">06</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152381.webp"
+                                 alt="標案設計作品六"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品七"
+                        aria-label="第 7 張，共 10 張：標案設計作品七">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152382.webp"
+                           aria-label="放大檢視：標案設計作品七">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">07</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152382.webp"
+                                 alt="標案設計作品七"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品八"
+                        aria-label="第 8 張，共 10 張：標案設計作品八">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152383.webp"
+                           aria-label="放大檢視：標案設計作品八">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">08</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152383.webp"
+                                 alt="標案設計作品八"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品九"
+                        aria-label="第 9 張，共 10 張：標案設計作品九">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152384.webp"
+                           aria-label="放大檢視：標案設計作品九">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">09</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152384.webp"
+                                 alt="標案設計作品九"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="標案設計作品十"
+                        aria-label="第 10 張，共 10 張：標案設計作品十">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/tender_design/152385.webp"
+                           aria-label="放大檢視：標案設計作品十">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">10</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/tender_design/152385.webp"
+                                 alt="標案設計作品十"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    </ol>
+                </div>
+
+                <div class="portfolio-gallery-carousel__controls" aria-label="標案設計輪播控制">
+                    <button class="portfolio-gallery-carousel__button"
+                            type="button"
+                            data-gallery-previous
+                            aria-label="上一張作品">
+                        <span aria-hidden="true">←</span>
+                        上一張
+                    </button>
+                    <p class="portfolio-gallery-carousel__status"
+                       id="tender_design-gallery-status"
+                       data-gallery-status
+                       aria-live="polite"
+                       aria-atomic="true">
+                        01／10　標案設計作品一
+                    </p>
+                    <button class="portfolio-gallery-carousel__button"
+                            type="button"
+                            data-gallery-next
+                            aria-label="下一張作品">
+                        下一張
+                        <span aria-hidden="true">→</span>
+                    </button>
+                </div>
             </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152377.webp">
-                <div class="folder-number">03</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152377.webp" alt="標案設計3" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152378.webp">
-                <div class="folder-number">04</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152378.webp" alt="標案設計4" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152380.webp">
-                <div class="folder-number">05</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152380.webp" alt="標案設計5" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152381.webp">
-                <div class="folder-number">06</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152381.webp" alt="標案設計6" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152382.webp">
-                <div class="folder-number">07</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152382.webp" alt="標案設計7" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152383.webp">
-                <div class="folder-number">08</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152383.webp" alt="標案設計8" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152384.webp">
-                <div class="folder-number">09</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152384.webp" alt="標案設計9" class="folder-img">
-            </div>
-            <div class="folder-card" data-preview="../../img/tender_design/152385.webp">
-                <div class="folder-number">10</div>
-                <img src="../../img/folder_back.png" alt="資料夾" class="folder-bg">
-                <img src="../../img/tender_design/152385.webp" alt="標案設計10" class="folder-img">
-            </div>
-        </div>
+        </section>
     </main>
 
-    <img class="bottom-building" src="../../img/building1920X200.png" alt="Decor">
+    <img class="bottom-building" src="../../img/169426.webp" alt="" aria-hidden="true" width="1920" height="200">
 
     <footer>
-        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
-            <img style="width: 45px; height: 45px;" src="../../img/fb_logo45X45.png" alt="FB_logo">
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Facebook（在新分頁開啟）">
+            <img width="45" height="45" src="../../img/fb_logo45X45.png" alt="">
         </a>
-        <a href="https://www.threads.com/@junxing0613">
-            <img style="width: 45px; height: 45px;" src="../../img/threads_logo45X45.png" alt="threads_logo">
+        <a href="https://www.threads.com/@junxing0613"
+           target="_blank"
+           rel="noopener noreferrer"
+           aria-label="Threads（在新分頁開啟）">
+            <img width="45" height="45" src="../../img/threads_logo45X45.png" alt="">
         </a>
     </footer>
 
-    <div class="preview-modal" id="previewModal">
-        <span class="close-preview" id="closePreview">&times;</span>
-        <img class="preview-content" id="previewImg" src="" alt="預覽圖">
+    <div class="preview-modal"
+         data-gallery-modal
+         role="dialog"
+         aria-modal="true"
+         aria-hidden="true"
+         aria-label="作品放大預覽">
+        <button class="close-preview"
+                type="button"
+                data-gallery-preview-close
+                aria-label="關閉作品預覽">×</button>
+        <img class="preview-content"
+             data-gallery-preview-image
+             alt="">
+        <p class="preview-error" data-gallery-preview-error hidden>
+            圖片暫時無法載入，請關閉預覽後再試一次。
+        </p>
     </div>
 
-    <script src="../../script/preview_box.js"></script>
+    <script src="../../script/portfolio_gallery_carousel.js"></script>
+    <script src="../../script/particles.js"></script>
     <script src="../../script/back_to_top.js"></script>
     <script src="../../script/konami_rocket.js?v=20260712-ios-backdrop" defer></script>
 </body>

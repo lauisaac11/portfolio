@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>劉俊興 作品集</title>
+    <link rel="icon" href="img/my_logo.png" type="image/png">
     <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/particles.css">
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/back_to_top.css">
     <link rel="stylesheet" href="css/konami_rocket.css?v=20260712-ios-backdrop">
@@ -15,7 +17,7 @@
 
 
 <body>
-    <canvas id="particleCanvas"></canvas>
+    <canvas id="particleCanvas" aria-hidden="true"></canvas>
 
     <header>
         <a href="index.html">
@@ -58,8 +60,28 @@
             </div>
         </div>
         <div class="right_content">
-            <div class="my_ip_container">
-                <video class="my_ip" src="video/my_ip.webm" autoplay muted loop playsinline></video>
+            <div class="my_ip_container" data-hero-media>
+                <video class="my_ip my_ip_video"
+                       data-hero-video
+                       src="video/my_ip.webm"
+                       width="704"
+                       height="1014"
+                       autoplay
+                       muted
+                       loop
+                       playsinline
+                       preload="auto"
+                       role="img"
+                       aria-label="劉俊興的 3D 角色動畫"
+                       aria-hidden="true"></video>
+                <img class="my_ip my_ip_fallback"
+                     data-hero-fallback
+                     data-animated-src="img/my_ip-alpha-fallback.webp"
+                     data-still-src="img/my_ip-alpha-still.png"
+                     src="img/my_ip-alpha-still.png"
+                     width="352"
+                     height="507"
+                     alt="劉俊興的 3D 角色動畫">
             </div>
         </div>
     </main>
@@ -73,6 +95,7 @@
         </a>
     </footer>
 
+    <script src="script/hero_media.js"></script>
     <script src="script/particles.js"></script>
     <script src="script/back_to_top.js"></script>
     <script src="script/konami_rocket.js?v=20260712-ios-backdrop" defer></script>

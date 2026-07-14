@@ -1,0 +1,11 @@
+/* Shared ambient-particle layer. Keep it outside transformed page sections. */
+#particleCanvas {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+    z-index: -1;
+    pointer-events: none;
+    background: transparent;
+}
