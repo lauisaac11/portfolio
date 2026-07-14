@@ -15,7 +15,7 @@
 .about-body header {
     position: relative;
     z-index: 120;
-    box-shadow: 0 8px 0 rgba(23, 32, 61, 0.16);
+    box-shadow: none;
 }
 
 .about-body header > a {
@@ -69,7 +69,7 @@
 .about-detail-card {
     border: 3px solid var(--about-line);
     background: var(--about-paper);
-    box-shadow: 8px 8px 0 rgba(23, 32, 61, 0.23);
+    box-shadow: none;
 }
 
 .about-hero {
@@ -209,8 +209,8 @@
     color: var(--about-ink);
     font-weight: 900;
     text-decoration: none;
-    box-shadow: 4px 4px 0 var(--about-ink);
-    transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease;
+    box-shadow: none;
+    transition: background-color 160ms ease;
 }
 
 .about-button--primary {
@@ -223,21 +223,23 @@
 }
 
 @media (hover: hover) {
-    .about-button:hover,
-    .about-contact__email:hover {
-        transform: translate(-2px, -2px);
-        box-shadow: 6px 6px 0 var(--about-ink);
+    .about-button--primary:hover {
+        background: #273252;
     }
 
     .about-button--secondary:hover {
         background: var(--about-yellow);
     }
+
+    .about-contact__email:hover {
+        background: #edfbff;
+    }
 }
 
 .about-button:active,
 .about-contact__email:active {
-    transform: translate(2px, 2px);
-    box-shadow: 1px 1px 0 var(--about-ink);
+    transform: none;
+    box-shadow: none;
 }
 
 .about-snapshot {
@@ -507,7 +509,7 @@
     border-radius: 24px;
     color: var(--about-ink);
     background: var(--about-yellow);
-    box-shadow: 8px 8px 0 rgba(23, 32, 61, 0.28);
+    box-shadow: none;
 }
 
 .about-contact > div > p:last-child {
@@ -532,8 +534,8 @@
     line-height: 1.5;
     text-decoration: none;
     overflow-wrap: anywhere;
-    box-shadow: 4px 4px 0 var(--about-ink);
-    transition: transform 160ms ease, box-shadow 160ms ease;
+    box-shadow: none;
+    transition: background-color 160ms ease;
 }
 
 .about-contact__email span {
@@ -569,7 +571,7 @@ html.about-email-dialog-open {
     border: 3px solid var(--about-ink);
     border-radius: 22px;
     background: #ffffff;
-    box-shadow: 9px 9px 0 rgba(23, 32, 61, 0.38);
+    box-shadow: none;
 }
 
 .about-email-dialog__close {
@@ -650,7 +652,8 @@ html.about-email-dialog-open {
     text-align: center;
     text-decoration: none;
     cursor: pointer;
-    box-shadow: 3px 3px 0 var(--about-ink);
+    box-shadow: none;
+    transition: background-color 160ms ease;
 }
 
 .about-email-dialog__option--primary {
@@ -670,11 +673,29 @@ html.about-email-dialog-open {
 }
 
 @media (hover: hover) {
-    .about-email-dialog__option:hover,
-    .about-email-dialog__close:hover {
-        transform: translate(-1px, -1px);
-        box-shadow: 5px 5px 0 var(--about-ink);
+    .about-email-dialog__option:not(.about-email-dialog__option--primary):hover {
+        background: #fff8d6;
     }
+
+    .about-email-dialog__option--primary:hover {
+        background: #273252;
+    }
+
+    .about-email-dialog__close:hover {
+        background: #ffe681;
+    }
+}
+
+.about-email-dialog__option:active,
+.about-email-dialog__close:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.about-body .back-to-top,
+.about-body .back-to-top:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .about-body .space-container {
@@ -719,7 +740,7 @@ html.about-email-dialog-open {
     .about-section,
     .about-detail-card,
     .about-contact {
-        box-shadow: 5px 5px 0 rgba(23, 32, 61, 0.23);
+        box-shadow: none;
     }
 
     .about-section__heading--split,
@@ -809,7 +830,7 @@ html.about-email-dialog-open {
     .about-email-dialog__panel {
         padding: 26px 20px 22px;
         border-radius: 18px;
-        box-shadow: 5px 5px 0 rgba(23, 32, 61, 0.38);
+        box-shadow: none;
     }
 }
 
