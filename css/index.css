@@ -12,16 +12,6 @@ body {
     overflow-x: hidden;
 }
 
-#particleCanvas {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    z-index: -1;
-    pointer-events: none; /* 防止阻擋滑鼠事件 */
-}
-
 /* 頁首 */
 header {
     background-color: #ffffff;
@@ -62,6 +52,7 @@ main {
     width: 100%;
     max-width: 352px;
     position: relative;
+    aspect-ratio: 352 / 507;
 }
 
 .my_ip {
@@ -69,6 +60,28 @@ main {
     height: auto;
     display: block;
     border-radius: 20px;
+    background: transparent;
+}
+
+.my_ip_video {
+    position: relative;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 180ms ease-out;
+}
+
+.my_ip_video.is-ready {
+    opacity: 1;
+}
+
+.my_ip[hidden] {
+    display: none;
+}
+
+.my_ip_fallback {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
 }
 
 /* 頁尾 */
@@ -121,18 +134,18 @@ footer {
     -webkit-user-select: none;
     user-select: none;
     -webkit-touch-callout: none;
-    -webkit-transform: translateZ(0); 
-    transform: translateZ(0);        
-    will-change: transform;       
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: transform;
     touch-action: manipulation;
-    -webkit-backface-visibility: hidden; 
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
 }
 
 .index-btn:active {
-    transform: scale(0.92); 
-    background-color: #ffdb4a !important; 
-    transition: transform 0.05s ease; 
+    transform: scale(0.92);
+    background-color: #ffdb4a !important;
+    transition: transform 0.05s ease;
 }
 
 .btn-inner {
@@ -197,4 +210,4 @@ footer {
     .hi_isaac_img {
         width: 300px;
     }
-}
+}

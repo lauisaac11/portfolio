@@ -1,9 +1,12 @@
 // Back to Top functionality
 document.addEventListener('DOMContentLoaded', () => {
     const backToTopBtn = document.createElement('button');
-    backToTopBtn.innerHTML = '▲';
+    backToTopBtn.textContent = '▲';
     backToTopBtn.className = 'back-to-top';
     backToTopBtn.id = 'backToTopBtn';
+    backToTopBtn.type = 'button';
+    backToTopBtn.setAttribute('aria-label', '回到頁面頂端');
+    backToTopBtn.title = '回到頁面頂端';
     document.body.appendChild(backToTopBtn);
 
     window.addEventListener('scroll', () => {
@@ -12,12 +15,14 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             backToTopBtn.classList.remove('show');
         }
-    });
+    }, { passive: true });
 
     backToTopBtn.addEventListener('click', () => {
+        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
         window.scrollTo({
             top: 0,
-            behavior: 'smooth'
+            behavior: reduceMotion ? 'auto' : 'smooth'
         });
     });
 });
