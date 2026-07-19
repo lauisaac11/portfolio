@@ -113,11 +113,33 @@
     function isClarityAllowedOnPage() {
         const isSensitivePage = document.body?.dataset.analyticsClarity === "disabled";
         const referrerHasQuery = urlHasQuery(document.referrer);
+        const isClarityVerificationReferrer = isTrustedClarityReferrer(document.referrer);
 
         // Clarity records page and clicked URLs outside the custom-event payload.
         // Skip it where the DOM contains Email destinations or where the current
-        // URL/referrer has query parameters; GA4 still receives a sanitized path.
-        return !isSensitivePage && window.location.search === "" && !referrerHasQuery;
+        // URL/referrer has query parameters. The Clarity dashboard is the only
+        // allowlisted exception so its installation check can reach the tag.
+        return (
+            !isSensitivePage &&
+            window.location.search === "" &&
+            (!referrerHasQuery || isClarityVerificationReferrer)
+        );
+    }
+
+    function isTrustedClarityReferrer(value) {
+        if (!value) {
+            return false;
+        }
+
+        try {
+            const url = new URL(value);
+            return (
+                url.protocol === "https:" &&
+                url.hostname.toLowerCase() === "clarity.microsoft.com"
+            );
+        } catch (_error) {
+            return false;
+        }
     }
 
     function urlHasQuery(value) {
