@@ -40,7 +40,8 @@ GA4 Measurement ID 與 Clarity Project ID 是瀏覽器端服務所需的公開 c
 表單內容或使用者輸入。正式啟用 Clarity 前，請在 Clarity 控制台將 Masking 設為 **Strict**，
 並依適用地區完成隱私聲明與 Consent Mode／同意管理。不要使用 Clarity Identify 傳送姓名、Email
 或其他個人識別資訊。為避免 Clarity 的 clicked URL 與頁面 URL telemetry 收到 Email 或 query，
-關於／聯絡頁，以及目前網址或 referrer 含 query parameter 的頁面會停用 Clarity；GA4 仍以去除
+關於／聯絡頁，以及目前網址或不受信任 referrer 含 query parameter 的頁面會停用 Clarity；僅
+`https://clarity.microsoft.com` 的 HTTPS 安裝驗證來源可通過窄域 allowlist。GA4 仍以去除
 query/hash 的路徑記錄事件。GA4 的 Enhanced Measurement 也應只保留實際需要的功能，不啟用廣告用途。
 
 為避免 GA4 Enhanced Measurement 的 outbound click 自動事件讀取含收件者的 Gmail／`mailto:`
