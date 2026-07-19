@@ -25,7 +25,7 @@ node scripts/build-site.mjs --output dist
 
 設定路徑：Repository **Settings → Secrets and variables → Actions → New repository secret**。
 
-合併工作流程後，請到 **Settings → Pages → Build and deployment**，將 **Source** 改為 **GitHub Actions**。`github-pages` environment 應繼續只允許 `main` 分支部署。Pull request 只會以空白 ID 建置與檢查 JavaScript，不會讀取 Secrets，也不會部署；推送到 `main` 或在 `main` 手動執行 workflow 才會建立並部署正式 artifact。
+目前 Pages Source 已設定為 **GitHub Actions**，`github-pages` environment 只允許 `main` 分支部署。Pull request 只會以空白 ID 建置與檢查 JavaScript，不會讀取 Secrets，也不會部署；推送到 `main` 或在 `main` 手動執行 workflow 才會建立並部署正式 artifact。正式環境已設定 `GA_MEASUREMENT_ID`；未設定 `CLARITY_PROJECT_ID` 時只停用 Clarity，不影響 GA4 或網站功能。
 
 GA4 Measurement ID 與 Clarity Project ID 是瀏覽器端服務所需的公開 client identifier，部署後可由訪客查看。Repository Secrets 的作用是避免把它們硬編碼並提交到原始碼；它們不是可授權帳號或存取資料的密鑰。
 
