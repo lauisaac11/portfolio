@@ -2,6 +2,8 @@
     "use strict";
 
     const EMAIL_ADDRESS = "isaaclaujx@gmail.com";
+    const EMAIL_SUBJECT = "作品集聯絡";
+    const GMAIL_COMPOSE_URL = "https://mail.google.com/mail/";
     const dialog = document.querySelector("[data-email-dialog]");
     const openers = [...document.querySelectorAll("[data-email-contact]")];
 
@@ -37,9 +39,30 @@
         }
     }
 
+    function buildGmailUrl() {
+        const url = new URL(GMAIL_COMPOSE_URL);
+        url.searchParams.set("view", "cm");
+        url.searchParams.set("fs", "1");
+        url.searchParams.set("to", EMAIL_ADDRESS);
+        url.searchParams.set("su", EMAIL_SUBJECT);
+        return url.toString();
+    }
+
+    function openEmailDestination(action) {
+        if (action === "gmail") {
+            window.open(buildGmailUrl(), "_blank", "noopener,noreferrer");
+            return;
+        }
+
+        if (action === "mailto") {
+            window.open(`mailto:${EMAIL_ADDRESS}`, "_self");
+        }
+    }
+
     function openDialog(event) {
         if (typeof dialog.showModal !== "function") {
-            // Progressive enhancement: unsupported browsers keep native mailto.
+            event.preventDefault();
+            openEmailDestination("mailto");
             return;
         }
 
@@ -98,7 +121,12 @@
     copyButton?.addEventListener("click", copyEmail);
 
     externalOptions.forEach((option) => {
-        option.addEventListener("click", closeDialog);
+        option.addEventListener("click", (event) => {
+            event.preventDefault();
+            const action = event.currentTarget.dataset.emailAction;
+            closeDialog();
+            openEmailDestination(action);
+        });
     });
 
     dialog.addEventListener("click", (event) => {

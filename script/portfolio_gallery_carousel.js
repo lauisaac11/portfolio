@@ -79,6 +79,11 @@
                         alt: image ? image.alt : slides[index].dataset.title || "作品預覽",
                         trigger: link
                     });
+                    document.dispatchEvent(new CustomEvent("portfolio:project-open", {
+                        detail: {
+                            projectName: slides[index].dataset.title || ""
+                        }
+                    }));
                 }
             });
         });

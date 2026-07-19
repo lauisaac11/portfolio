@@ -2,6 +2,8 @@
 <html lang="zh-Hant">
 
 <head>
+    <script src="../script/analytics-config.js" defer></script>
+    <script src="../script/analytics.js" defer></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="認識視覺傳達設計師劉俊興（Isaac Lau Jun Xing）：品牌視覺、角色設計、主視覺延伸、空間效果與前端網頁實作。">
@@ -23,7 +25,7 @@
     <link rel="stylesheet" href="../css/konami_rocket.css?v=20260712-ios-backdrop">
 </head>
 
-<body class="about-body">
+<body class="about-body" data-analytics-clarity="disabled">
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
     <a class="about-skip-link" href="#main-content">跳至主要內容</a>
 
@@ -56,7 +58,7 @@
         </nav>
     </header>
 
-    <main class="about-main" id="main-content">
+    <main class="about-main" id="main-content" data-clarity-mask="true">
         <section class="about-hero" aria-labelledby="about-title">
             <div class="about-hero__copy">
                 <p class="about-kicker">關於我</p>
@@ -73,7 +75,11 @@
                 <div class="about-actions" aria-label="主要行動">
                     <a class="about-button about-button--primary" href="portfolio.html">查看作品</a>
                     <a class="about-button about-button--secondary"
-                       href="mailto:isaaclaujx@gmail.com"
+                       href="#email-contact-dialog"
+                       aria-haspopup="dialog"
+                       aria-controls="email-contact-dialog"
+                       data-analytics-event="contact_cta_click"
+                       data-analytics-location="about_hero"
                        data-email-contact>電子郵件聯絡</a>
                 </div>
             </div>
@@ -211,7 +217,11 @@
                 <p>歡迎來信聊聊品牌、視覺、展場或數位體驗。</p>
             </div>
             <a class="about-contact__email"
-               href="mailto:isaaclaujx@gmail.com"
+               href="#email-contact-dialog"
+               aria-haspopup="dialog"
+               aria-controls="email-contact-dialog"
+               data-analytics-event="contact_cta_click"
+               data-analytics-location="about_contact"
                data-email-contact>
                 <span>來信聯絡</span>
                 isaaclaujx@gmail.com
@@ -220,7 +230,9 @@
     </main>
 
     <dialog class="about-email-dialog"
+            id="email-contact-dialog"
             data-email-dialog
+            data-clarity-mask="true"
             aria-labelledby="about-email-dialog-title"
             aria-describedby="about-email-dialog-description">
         <div class="about-email-dialog__panel">
@@ -236,15 +248,21 @@
             <p class="about-email-dialog__address">isaaclaujx@gmail.com</p>
             <div class="about-email-dialog__actions">
                 <a class="about-email-dialog__option about-email-dialog__option--primary"
-                   href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to=isaaclaujx%40gmail.com&amp;su=作品集聯絡"
-                   target="_blank"
-                   rel="noopener noreferrer"
+                   href="#email-gmail"
+                   data-analytics-event="contact_email_click"
+                   data-analytics-method="gmail"
+                   data-email-action="gmail"
                    data-email-dialog-option>使用 Gmail 網頁版</a>
                 <a class="about-email-dialog__option"
-                   href="mailto:isaaclaujx@gmail.com"
+                   href="#email-mailto"
+                   data-analytics-event="contact_email_click"
+                   data-analytics-method="mailto"
+                   data-email-action="mailto"
                    data-email-dialog-option>開啟郵件程式</a>
                 <button class="about-email-dialog__option"
                         type="button"
+                        data-analytics-event="contact_email_click"
+                        data-analytics-method="copy"
                         data-email-copy>複製 Email</button>
             </div>
             <p class="about-email-dialog__status"
@@ -254,13 +272,17 @@
         </div>
     </dialog>
 
+    <noscript>
+        <p>JavaScript 未啟用時，請使用 <a href="mailto:isaaclaujx@gmail.com">isaaclaujx@gmail.com</a> 聯絡。</p>
+    </noscript>
+
     <div class="space-container" aria-hidden="true">
         <img class="looping-ship" src="../img/px_spaceship.gif" alt="">
     </div>
 
     <img class="bottom-building" src="../img/169426.webp" alt="" aria-hidden="true" width="1920" height="200">
 
-    <footer>
+    <footer data-clarity-mask="true">
         <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW" target="_blank" rel="noopener noreferrer" aria-label="Facebook（在新分頁開啟）">
             <img width="45" height="45" src="../img/fb_logo45X45.png" alt="">
         </a>
