@@ -1,0 +1,484 @@
+/*
+ * 全站網頁版液態玻璃材質。
+ * 這是以 CSS backdrop-filter 製作的網頁近似效果，不是 Apple 原生材質。
+ */
+
+:root {
+    --liquid-glass-blur: 28px;
+    --liquid-glass-control-blur: 14px;
+    --liquid-glass-edge: rgba(255, 255, 255, 0.72);
+    --liquid-glass-edge-soft: rgba(255, 255, 255, 0.54);
+    --liquid-glass-surface:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.74), rgba(235, 224, 255, 0.68) 52%, rgba(211, 247, 255, 0.64)),
+        rgba(231, 228, 255, 0.66);
+    --liquid-glass-chrome:
+        linear-gradient(105deg, rgba(248, 232, 255, 0.9), rgba(226, 246, 255, 0.84)),
+        rgba(237, 230, 255, 0.76);
+    --liquid-glass-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.32),
+        0 18px 50px rgba(111, 67, 181, 0.15),
+        0 6px 18px rgba(52, 193, 225, 0.08);
+    --liquid-glass-control-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.88),
+        inset 0 -1px 0 rgba(255, 255, 255, 0.28),
+        0 9px 24px rgba(111, 67, 181, 0.14);
+}
+
+/* 大型結構使用較厚的玻璃，承接背景漸層與粒子。 */
+:is(
+    header,
+    footer,
+    .card-top,
+    .about-skip-link,
+    .about-hero,
+    .about-section,
+    .about-detail-card,
+    .about-snapshot,
+    .about-scope,
+    .about-methods li,
+    .about-contact,
+    .about-email-dialog__panel,
+    .portfolio-gallery-skip-link,
+    .portfolio-gallery-carousel__status
+) {
+    border: 1px solid var(--liquid-glass-edge);
+    background: var(--liquid-glass-surface);
+    box-shadow: var(--liquid-glass-shadow);
+    -webkit-backdrop-filter: blur(var(--liquid-glass-blur)) saturate(124%) brightness(1.02) contrast(1.01);
+    backdrop-filter: blur(var(--liquid-glass-blur)) saturate(124%) brightness(1.02) contrast(1.01);
+}
+
+header,
+footer {
+    border-inline: 0;
+    background: var(--liquid-glass-chrome);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.82),
+        0 10px 30px rgba(111, 67, 181, 0.1);
+}
+
+footer {
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.72),
+        0 -10px 30px rgba(52, 193, 225, 0.08);
+}
+
+/*
+ * Footer 已是玻璃層，社群連結改用近乎實色的獨立底座。
+ * color 混合模式只替灰色底上色，保留白色品牌符號的亮度。
+ */
+footer a[href*="facebook.com"],
+footer a[href*="threads.com"] {
+    position: relative;
+    isolation: isolate;
+    display: grid;
+    width: 58px;
+    height: 58px;
+    box-sizing: border-box;
+    place-items: center;
+    overflow: hidden;
+    border: 0;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.96),
+        0 8px 20px rgba(82, 65, 145, 0.16);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    transition:
+        transform 160ms cubic-bezier(0.22, 0.72, 0.16, 1),
+        box-shadow 160ms ease;
+}
+
+footer a[href*="facebook.com"] img,
+footer a[href*="threads.com"] img {
+    position: relative;
+    z-index: 1;
+    display: block;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    filter: contrast(1.08);
+}
+
+footer a[href*="facebook.com"]::after,
+footer a[href*="threads.com"]::after {
+    position: absolute;
+    z-index: 2;
+    width: 45px;
+    height: 45px;
+    border-radius: 12px;
+    content: "";
+    mix-blend-mode: color;
+    pointer-events: none;
+}
+
+footer a[href*="facebook.com"]::after {
+    background: #1877f2;
+}
+
+footer a[href*="threads.com"]::after {
+    background: #6542d6;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    footer a[href*="facebook.com"]:hover,
+    footer a[href*="threads.com"]:hover {
+        transform: translateY(-2px);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.98),
+            0 11px 24px rgba(82, 65, 145, 0.2);
+    }
+}
+
+footer a[href*="facebook.com"]:active,
+footer a[href*="threads.com"]:active {
+    transform: scale(0.96);
+}
+
+/* 小型控制使用較輕的玻璃，避免按鈕看起來厚重。 */
+:is(
+    button,
+    [role="button"],
+    .index-btn,
+    .card-btn,
+    .back-to-top,
+    .about-button,
+    .about-contact__email,
+    .about-email-dialog__close,
+    .about-email-dialog__option,
+    .about-kicker,
+    .about-scope li,
+    .about-tool-list li,
+    .portfolio-gallery__eyebrow,
+    .portfolio-gallery-carousel__number,
+    .portfolio-gallery-carousel__button,
+    .portfolio-gallery-body .close-preview
+) {
+    border: 1px solid var(--liquid-glass-edge-soft);
+    box-shadow: var(--liquid-glass-control-shadow);
+    -webkit-backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(128%) brightness(1.02);
+    backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(128%) brightness(1.02);
+}
+
+/* 按鈕內層只保留柔和高光，不再產生雙層粗框。 */
+.btn-inner {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    border: 0;
+    border-radius: inherit;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.26), rgba(255, 255, 255, 0.04));
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.btn-pink,
+.card-btn,
+.back-to-top {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04)),
+        rgba(255, 104, 239, 0.94);
+}
+
+.btn-blue,
+.about-button--secondary,
+.portfolio-gallery-carousel__button {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04)),
+        rgba(65, 203, 246, 0.94);
+}
+
+.portfolio-gallery-carousel__button:last-child {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.28), rgba(255, 255, 255, 0.04)),
+        rgba(255, 104, 239, 0.94);
+}
+
+.about-button--primary,
+.about-email-dialog__option--primary {
+    color: #ffffff;
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.18), rgba(255, 255, 255, 0.02)),
+        rgba(59, 42, 114, 0.94);
+}
+
+.about-contact {
+    background:
+        linear-gradient(135deg, rgba(255, 252, 209, 0.94), rgba(255, 238, 132, 0.76) 62%, rgba(211, 247, 255, 0.58)),
+        rgba(255, 226, 86, 0.9);
+}
+
+.about-snapshot {
+    background:
+        linear-gradient(145deg, rgba(196, 242, 255, 0.9), rgba(218, 199, 255, 0.86) 64%, rgba(255, 198, 240, 0.82)),
+        rgba(229, 226, 255, 0.82);
+}
+
+.about-methods li:nth-child(2) {
+    background:
+        linear-gradient(135deg, rgba(255, 241, 253, 0.88), rgba(255, 191, 237, 0.7)),
+        rgba(255, 222, 247, 0.8);
+}
+
+.about-methods li:nth-child(3) {
+    background:
+        linear-gradient(135deg, rgba(238, 252, 255, 0.88), rgba(171, 234, 255, 0.7)),
+        rgba(211, 244, 255, 0.82);
+}
+
+/* 避免玻璃疊玻璃：內層保留高光，但不重複計算背景模糊。 */
+:is(
+    .about-hero .about-snapshot,
+    .about-hero .about-button,
+    .about-section .about-scope,
+    .about-section .about-methods li,
+    .about-contact .about-contact__email,
+    .about-email-dialog__panel .about-email-dialog__close,
+    .about-email-dialog__panel .about-email-dialog__option
+) {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* 玻璃內的內容層保持清晰，不重複堆疊模糊材質。 */
+:is(
+    .about-snapshot__brand,
+    .about-facts,
+    .about-email-dialog__address,
+    .about-contact__email,
+    .about-email-dialog__option
+) {
+    border: 1px solid rgba(255, 255, 255, 0.46);
+    background: rgba(255, 255, 255, 0.86);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.about-email-dialog__option--primary {
+    background: rgba(59, 42, 114, 0.96);
+}
+
+.about-facts > div,
+.about-credentials li {
+    border-color: rgba(255, 255, 255, 0.34);
+}
+
+.about-email-dialog__close {
+    background: rgba(255, 219, 74, 0.94);
+}
+
+.portfolio-gallery__eyebrow,
+.portfolio-gallery-carousel__number,
+.about-kicker {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 255, 0.38), rgba(255, 255, 255, 0.06)),
+        rgba(255, 219, 74, 0.94);
+}
+
+.portfolio-gallery-body .close-preview {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+/* 導覽選單在頁首內保持單層；只有浮出的選單本身使用玻璃。 */
+.nav-links,
+.nav-links li a,
+.dropdown-content,
+.dropdown-content li a {
+    border-color: transparent;
+    box-shadow: none;
+}
+
+.dropdown-content {
+    border: 1px solid var(--liquid-glass-edge);
+    background:
+        linear-gradient(135deg, rgba(250, 231, 255, 0.9), rgba(220, 247, 255, 0.84)),
+        rgba(237, 230, 255, 0.86);
+    box-shadow: var(--liquid-glass-control-shadow);
+    -webkit-backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(124%) brightness(1.02);
+    backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(124%) brightness(1.02);
+}
+
+/* 作品本體保持乾淨，不把投影誤當成玻璃厚度。 */
+.portfolio-gallery__heading h1 {
+    text-shadow: none;
+}
+
+.portfolio-gallery-carousel__image,
+.portfolio-gallery-carousel.is-enhanced
+    .portfolio-gallery-carousel__slide[data-position="active"]
+    .portfolio-gallery-carousel__image {
+    filter: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    :is(
+        .index-btn,
+        .card-btn,
+        .back-to-top,
+        .about-button,
+        .about-contact__email,
+        .about-email-dialog__option,
+        .portfolio-gallery-carousel__button
+    ):hover {
+        filter: brightness(1.04) saturate(1.06);
+        box-shadow:
+            inset 0 1px 0 rgba(255, 255, 255, 0.88),
+            0 12px 30px rgba(111, 67, 181, 0.16);
+        transform: translateY(-1px);
+    }
+}
+
+:is(
+    .index-btn,
+    .card-btn,
+    .back-to-top,
+    .about-button,
+    .about-contact__email,
+    .about-email-dialog__option,
+    .portfolio-gallery-carousel__button
+):active {
+    filter: brightness(0.98);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.54);
+    transform: scale(0.97);
+    transition-duration: 90ms;
+}
+
+/* 鍵盤焦點採品牌色，不使用黑色外框。 */
+:is(a, button, [role="button"], label):focus-visible,
+.about-body :is(a, button, label):focus-visible,
+.portfolio-gallery-body :is(a, button):focus-visible {
+    outline: 2px solid #7b2778;
+    outline-offset: 3px;
+}
+
+.preview-modal :is(a, button, [role="button"]):focus-visible,
+.about-email-dialog :is(a, button, [role="button"]):focus-visible {
+    outline-color: #ffdb4a;
+}
+
+@media screen and (max-width: 780px) {
+    :root {
+        --liquid-glass-blur: 18px;
+        --liquid-glass-control-blur: 10px;
+    }
+
+    .nav-links {
+        border: 1px solid var(--liquid-glass-edge);
+        background:
+            linear-gradient(135deg, rgba(250, 231, 255, 0.92), rgba(220, 247, 255, 0.88)),
+            rgba(237, 230, 255, 0.9);
+        box-shadow: var(--liquid-glass-control-shadow);
+        -webkit-backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(122%) brightness(1.02);
+        backdrop-filter: blur(var(--liquid-glass-control-blur)) saturate(122%) brightness(1.02);
+    }
+}
+
+@supports not ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+    :is(
+        header,
+        footer,
+        .card-top,
+        .about-hero,
+        .about-section,
+        .about-detail-card,
+        .about-snapshot,
+        .about-scope,
+        .about-methods li,
+        .about-contact,
+        .about-email-dialog__panel,
+        .portfolio-gallery-carousel__status,
+        .dropdown-content,
+        .nav-links
+    ) {
+        background: rgba(255, 255, 255, 0.9);
+    }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+    :is(
+        header,
+        footer,
+        .card-top,
+        .about-hero,
+        .about-section,
+        .about-detail-card,
+        .about-snapshot,
+        .about-scope,
+        .about-methods li,
+        .about-contact,
+        .about-email-dialog__panel,
+        .portfolio-gallery-carousel__status,
+        .dropdown-content,
+        .nav-links
+    ) {
+        background: rgba(255, 255, 255, 0.94);
+        box-shadow: none;
+        -webkit-backdrop-filter: none;
+        backdrop-filter: none;
+    }
+}
+
+@media (prefers-contrast: more) {
+    :is(
+        button,
+        [role="button"],
+        .card-top,
+        .about-hero,
+        .about-section,
+        .about-detail-card,
+        .about-contact,
+        .portfolio-gallery-carousel__button,
+        .portfolio-gallery-carousel__status
+    ) {
+        border-color: rgba(83, 39, 112, 0.82);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    footer a[href*="facebook.com"],
+    footer a[href*="threads.com"] {
+        transition: none;
+    }
+
+    footer a[href*="facebook.com"]:hover,
+    footer a[href*="threads.com"]:hover,
+    footer a[href*="facebook.com"]:active,
+    footer a[href*="threads.com"]:active {
+        transform: none;
+    }
+
+    :is(
+        .index-btn,
+        .card-btn,
+        .back-to-top,
+        .about-button,
+        .about-contact__email,
+        .about-email-dialog__option,
+        .portfolio-gallery-carousel__button
+    ) {
+        transition: none;
+    }
+
+    :is(
+        .index-btn,
+        .card-btn,
+        .back-to-top,
+        .about-button,
+        .about-contact__email,
+        .about-email-dialog__option,
+        .portfolio-gallery-carousel__button
+    ):hover,
+    :is(
+        .index-btn,
+        .card-btn,
+        .back-to-top,
+        .about-button,
+        .about-contact__email,
+        .about-email-dialog__option,
+        .portfolio-gallery-carousel__button
+    ):active {
+        transform: none;
+    }
+}
