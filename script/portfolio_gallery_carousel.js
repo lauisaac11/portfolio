@@ -178,13 +178,13 @@
                     transform: "scale(0.97)",
                     filter: "brightness(0.98)",
                     backgroundColor: "rgba(255, 219, 74, 0.96)",
-                    offset: 0.35
+                    offset: 0.25
                 },
                 {
                     transform: "scale(0.97)",
                     filter: "brightness(0.98)",
                     backgroundColor: "rgba(255, 219, 74, 0.96)",
-                    offset: 0.65,
+                    offset: 0.75,
                     easing: "cubic-bezier(0.22, 0.72, 0.16, 1)"
                 },
                 {
@@ -193,7 +193,7 @@
                     backgroundColor: restingBackground
                 }
             ], {
-                duration: 180
+                duration: 240
             });
 
             controlAnimations.set(button, animation);
