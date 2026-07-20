@@ -36,6 +36,8 @@
         }
 
         const links = slides.map((slide) => slide.querySelector("[data-gallery-open]"));
+        const controlAnimations = new WeakMap();
+        const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
         let activeIndex = 0;
         let touchState = null;
         let suppressClickUntil = 0;
@@ -121,6 +123,7 @@
 
             // Keep the visible keyboard focus on a real control instead of drawing an outline around the artwork.
             focusTarget.focus({ preventScroll: true });
+            playControlPress(focusTarget);
             setActive(nextIndex);
         });
 
@@ -139,12 +142,70 @@
                 if (event.code === "ArrowLeft") {
                     event.preventDefault();
                     // Background navigation intentionally keeps focus where it is, so no artwork outline appears.
+                    playControlPress(previousButton);
                     setActive(activeIndex - 1);
                 } else if (event.code === "ArrowRight") {
                     event.preventDefault();
+                    playControlPress(nextButton);
                     setActive(activeIndex + 1);
                 }
             });
+        }
+
+        /**
+         * Mirrors the pointer press feedback for arrow-key navigation without
+         * changing focus ownership or leaving a persistent state class behind.
+         */
+        function playControlPress(button) {
+            if (reduceMotion.matches || typeof button.animate !== "function") {
+                return;
+            }
+
+            const previousAnimation = controlAnimations.get(button);
+            if (previousAnimation) {
+                previousAnimation.cancel();
+            }
+
+            const restingBackground = getComputedStyle(button).backgroundColor;
+            const animation = button.animate([
+                {
+                    transform: "scale(1)",
+                    filter: "brightness(1)",
+                    backgroundColor: restingBackground,
+                    easing: "cubic-bezier(0.22, 0.72, 0.16, 1)"
+                },
+                {
+                    transform: "scale(0.97)",
+                    filter: "brightness(0.98)",
+                    backgroundColor: "rgba(255, 219, 74, 0.96)",
+                    offset: 0.35
+                },
+                {
+                    transform: "scale(0.97)",
+                    filter: "brightness(0.98)",
+                    backgroundColor: "rgba(255, 219, 74, 0.96)",
+                    offset: 0.65,
+                    easing: "cubic-bezier(0.22, 0.72, 0.16, 1)"
+                },
+                {
+                    transform: "scale(1)",
+                    filter: "brightness(1)",
+                    backgroundColor: restingBackground
+                }
+            ], {
+                duration: 180
+            });
+
+            controlAnimations.set(button, animation);
+
+            const releaseAnimation = () => {
+                if (controlAnimations.get(button) === animation) {
+                    controlAnimations.delete(button);
+                }
+            };
+
+            animation.addEventListener("finish", releaseAnimation, { once: true });
+            animation.addEventListener("cancel", releaseAnimation, { once: true });
         }
 
         stage.addEventListener("touchstart", (event) => {

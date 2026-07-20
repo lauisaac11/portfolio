@@ -195,6 +195,17 @@ footer a[href*="threads.com"]:active {
         rgba(255, 104, 239, 0.94);
 }
 
+/* 左右輪播控制共用黃色互動回饋，避免下一張的粉色底蓋過狀態色。 */
+.portfolio-gallery-body .portfolio-gallery-carousel__button:active {
+    background-color: rgba(255, 219, 74, 0.96);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    .portfolio-gallery-body .portfolio-gallery-carousel__button:hover {
+        background-color: rgba(255, 219, 74, 0.96);
+    }
+}
+
 .about-button--primary,
 .about-email-dialog__option--primary {
     color: #ffffff;
@@ -355,6 +366,14 @@ footer a[href*="threads.com"]:active {
 
 .preview-modal :is(a, button, [role="button"]):focus-visible,
 .about-email-dialog :is(a, button, [role="button"]):focus-visible {
+    outline-color: #ffdb4a;
+}
+
+/*
+ * 輪播的左右鍵會在鍵盤導覽時接收焦點。改用明亮黃色提示，
+ * 避免深紫色在半透明玻璃上看起來像點擊後留下的黑框。
+ */
+.portfolio-gallery-body .portfolio-gallery-carousel__button:focus-visible {
     outline-color: #ffdb4a;
 }
 
