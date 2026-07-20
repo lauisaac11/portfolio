@@ -1,4 +1,15 @@
 /* Navigation Styles */
+/*
+ * Layer scale: page media stays in the content layer, while the site header
+ * owns the navigation layer. This keeps glass/backdrop-filter stacking
+ * contexts from placing videos or galleries above the dropdown menu.
+ */
+header {
+    position: relative;
+    z-index: 1000;
+    overflow: visible;
+}
+
 nav {
     margin-left: auto;
     display: flex;
