@@ -395,6 +395,7 @@
 
         let trigger = null;
         let isOpen = false;
+        let inertBackground = [];
 
         closeButton.addEventListener("click", () => {
             close();
@@ -442,6 +443,12 @@
                 image.src = src;
                 modal.classList.add("is-active");
                 modal.setAttribute("aria-hidden", "false");
+                inertBackground = Array.from(document.body.children)
+                    .filter((element) => element !== modal && element instanceof HTMLElement)
+                    .map((element) => ({ element, wasInert: element.inert }));
+                inertBackground.forEach(({ element }) => {
+                    element.inert = true;
+                });
                 closeButton.focus({ preventScroll: true });
             }
         };
@@ -454,6 +461,10 @@
             isOpen = false;
             modal.classList.remove("is-active");
             modal.setAttribute("aria-hidden", "true");
+            inertBackground.forEach(({ element, wasInert }) => {
+                element.inert = wasInert;
+            });
+            inertBackground = [];
             image.removeAttribute("src");
             image.hidden = false;
             errorMessage.hidden = true;

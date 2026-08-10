@@ -1,0 +1,151 @@
+/* Site-wide WCAG 2.2 helpers. These styles stay visually dormant until used. */
+.site-visually-hidden {
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+}
+
+.site-skip-link {
+    position: fixed;
+    z-index: 10001;
+    top: 10px;
+    left: 12px;
+    padding: 10px 16px;
+    border: 2px solid #7b2778;
+    border-radius: 12px;
+    color: #2b1642;
+    background: #ffffff;
+    font-family: "cubic_11", sans-serif;
+    font-size: 18px;
+    text-decoration: none;
+    transform: translateY(calc(-100% - 20px));
+    transition: none;
+}
+
+.site-skip-link:focus {
+    transform: translateY(0);
+}
+
+/* The skip-link target receives programmatic focus without adding a visual box. */
+main[tabindex="-1"]:focus {
+    outline: none;
+}
+
+footer {
+    box-sizing: border-box;
+}
+
+.menu-toggle,
+.dropdown-toggle {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+/* Keep the header disclosure visually identical to the adjacent text links. */
+.site-nav .dropdown-toggle {
+    border: 0;
+    background: transparent;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+}
+
+.site-motion-toggle {
+    position: fixed;
+    z-index: 900;
+    bottom: 20px;
+    left: 20px;
+    display: grid;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.72);
+    border-radius: 50%;
+    color: #3b2a72;
+    background: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 8px 20px rgba(82, 65, 145, 0.18);
+    font: 700 18px/1 system-ui, sans-serif;
+    cursor: pointer;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.site-motion-toggle:hover {
+    background: #ffffff;
+}
+
+.site-motion-toggle:focus-visible {
+    outline: 3px solid #7b2778;
+    outline-offset: 3px;
+}
+
+.site-motion-toggle[aria-pressed="true"] {
+    color: #ffffff;
+    background: rgba(59, 42, 114, 0.96);
+}
+
+.site-motion-toggle::before {
+    width: 14px;
+    height: 16px;
+    content: "";
+    background: linear-gradient(
+        90deg,
+        currentColor 0 4px,
+        transparent 4px 10px,
+        currentColor 10px 14px
+    );
+}
+
+.site-motion-toggle[aria-pressed="true"]::before {
+    width: 0;
+    height: 0;
+    margin-left: 3px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 13px solid currentColor;
+    background: none;
+}
+
+/* The ambient ship is a GIF, so hiding it is the only reliable cross-browser pause. */
+.site-motion-paused .looping-ship {
+    visibility: hidden;
+    animation-play-state: paused;
+}
+
+@media screen and (max-width: 780px) {
+    .site-motion-toggle {
+        bottom: 20px;
+        left: 20px;
+        width: 44px;
+        height: 44px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .site-skip-link {
+        transition: none;
+    }
+
+    .looping-ship {
+        visibility: hidden;
+        animation: none;
+    }
+}
+
+@media (forced-colors: active) {
+    .site-skip-link,
+    .site-motion-toggle {
+        border: 2px solid ButtonText;
+    }
+}

@@ -140,6 +140,8 @@ footer {
     touch-action: manipulation;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    display: block;
+    text-decoration: none;
 }
 
 .index-btn:active {

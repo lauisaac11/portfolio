@@ -134,6 +134,8 @@ header img {
 
     /* 關鍵：提升觸控反應 */
     touch-action: manipulation;
+    display: block;
+    text-decoration: none;
 }
 
 /* 電腦端 Hover */

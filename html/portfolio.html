@@ -22,31 +22,32 @@
     <link rel="stylesheet" href="../css/particles.css">
     <link rel="stylesheet" href="../css/back_to_top.css">
     <link rel="stylesheet" href="../css/liquid_glass.css">
+    <link rel="stylesheet" href="../css/accessibility.css">
     <link rel="stylesheet" href="../css/konami_rocket.css?v=20260712-ios-backdrop">
 </head>
 
 <body>
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <a class="site-skip-link" href="#main-content">跳至主要內容</a>
 
     <header>
         <!-- 保留 alt="Logo"：手機版七連點彩蛋以此作為觸發目標。 -->
         <a href="../index.html" aria-label="前往作品集首頁">
             <img src="../img/my_logo.png" alt="Logo" width="68" height="63">
         </a>
-        <nav aria-label="主要導覽">
-            <input type="checkbox" id="nav-checkbox" aria-label="切換導覽選單">
-            <label for="nav-checkbox" class="menu-toggle" aria-label="開啟或關閉導覽選單">
+        <nav class="site-nav" data-site-nav aria-label="主要導覽">
+            <button class="menu-toggle" type="button" data-nav-toggle aria-controls="primary-navigation" aria-expanded="false" aria-label="開啟主要導覽選單">
                 <span></span>
                 <span></span>
                 <span></span>
-            </label>
-            <ul class="nav-links">
+            </button>
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="../index.html">首頁</a></li>
                 <li><a href="introduction.html">關於我</a></li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)" aria-current="page" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
-                    <ul class="dropdown-content">
-                        <li><a href="portfolio.html">全部作品</a></li>
+                <li class="dropdown" data-nav-dropdown>
+                    <button class="dropdown-toggle" type="button" data-dropdown-toggle aria-controls="portfolio-navigation" aria-expanded="false">作品集 ▾</button>
+                    <ul class="dropdown-content" id="portfolio-navigation">
+                        <li><a href="portfolio.html" aria-current="page">全部作品</a></li>
                         <li><a href="portfolio/ip_design.html">形象設計</a></li>
                         <li><a href="portfolio/poster_design.html">海報設計</a></li>
                         <li><a href="portfolio/tender_design.html">標案設計</a></li>
@@ -57,7 +58,8 @@
         </nav>
     </header>
 
-    <main id="main-content" style="flex: 1;">
+    <main id="main-content" tabindex="-1" style="flex: 1;">
+        <h1 class="site-visually-hidden">作品集分類</h1>
         <div class="logo-type-container">
             <img src="../img/protfolio_logotype.webp" alt="作品集">
         </div>
@@ -67,36 +69,36 @@
                 <div class="card-top">
                     <img style="width: 177px; height: 205px;" src="../img/macarons_px.webp" alt="形象設計">
                 </div>
-                <button class="card-btn" type="button" onclick="location.href='portfolio/ip_design.html'">
-                    <div class="btn-inner"><span>形象設計</span></div>
-                </button>
+                <a class="card-btn" href="portfolio/ip_design.html">
+                    <span class="btn-inner"><span>形象設計</span></span>
+                </a>
             </div>
 
             <div class="card">
                 <div class="card-top">
                     <img style="width: 152px; height: 205px;" src="../img/poster_design185X205.webp" alt="海報設計">
                 </div>
-                <button class="card-btn" type="button" onclick="location.href='portfolio/poster_design.html'">
-                    <div class="btn-inner"><span>海報設計</span></div>
-                </button>
+                <a class="card-btn" href="portfolio/poster_design.html">
+                    <span class="btn-inner"><span>海報設計</span></span>
+                </a>
             </div>
 
             <div class="card">
                 <div class="card-top">
                     <img style="width: 185px; height: 205px;" src="../img/tender_design.webp" alt="標案設計">
                 </div>
-                <button class="card-btn" type="button" onclick="location.href='portfolio/tender_design.html'">
-                    <div class="btn-inner"><span>標案設計</span></div>
-                </button>
+                <a class="card-btn" href="portfolio/tender_design.html">
+                    <span class="btn-inner"><span>標案設計</span></span>
+                </a>
             </div>
 
             <div class="card">
                 <div class="card-top">
                     <img style="width: 92px; height: 205px;" src="../img/text_design92X205.webp" alt="文字設計">
                 </div>
-                <button class="card-btn" type="button" onclick="location.href='portfolio/text_design.html'">
-                    <div class="btn-inner"><span>文字設計</span></div>
-                </button>
+                <a class="card-btn" href="portfolio/text_design.html">
+                    <span class="btn-inner"><span>文字設計</span></span>
+                </a>
             </div>
         </div>
     </main>
@@ -116,6 +118,7 @@
         </a>
     </footer>
 
+    <script src="../script/accessibility.js"></script>
     <script src="../script/particles.js"></script>
     <script src="../script/back_to_top.js"></script>
     <script src="../script/konami_rocket.js?v=20260712-ios-backdrop" defer></script>

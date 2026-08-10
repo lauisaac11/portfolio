@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/nav.css">
     <link rel="stylesheet" href="css/back_to_top.css">
     <link rel="stylesheet" href="css/liquid_glass.css">
+    <link rel="stylesheet" href="css/accessibility.css">
     <link rel="stylesheet" href="css/konami_rocket.css?v=20260712-ios-backdrop">
 
 
@@ -21,24 +22,24 @@
 
 <body>
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
+    <a class="site-skip-link" href="#main-content">跳至主要內容</a>
 
     <header>
-        <a href="index.html">
-            <img src="img/my_logo.png" alt="Logo">
+        <a href="index.html" aria-label="前往作品集首頁">
+            <img src="img/my_logo.png" alt="Logo" width="68" height="63">
         </a>
-        <nav>
-            <input type="checkbox" id="nav-checkbox">
-            <label for="nav-checkbox" class="menu-toggle">
+        <nav class="site-nav" data-site-nav aria-label="主要導覽">
+            <button class="menu-toggle" type="button" data-nav-toggle aria-controls="primary-navigation" aria-expanded="false" aria-label="開啟主要導覽選單">
                 <span></span>
                 <span></span>
                 <span></span>
-            </label>
-            <ul class="nav-links">
-                <li><a href="index.html">首頁</a></li>
+            </button>
+            <ul class="nav-links" id="primary-navigation">
+                <li><a href="index.html" aria-current="page">首頁</a></li>
                 <li><a href="html/introduction.html">關於我</a></li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
-                    <ul class="dropdown-content">
+                <li class="dropdown" data-nav-dropdown>
+                    <button class="dropdown-toggle" type="button" data-dropdown-toggle aria-controls="portfolio-navigation" aria-expanded="false">作品集 ▾</button>
+                    <ul class="dropdown-content" id="portfolio-navigation">
                         <li><a href="html/portfolio.html">全部作品</a></li>
                         <li><a href="html/portfolio/ip_design.html">形象設計</a></li>
                         <li><a href="html/portfolio/poster_design.html">海報設計</a></li>
@@ -50,16 +51,17 @@
         </nav>
     </header>
 
-    <main>
+    <main id="main-content" tabindex="-1">
+        <h1 class="site-visually-hidden">劉俊興視覺設計作品集</h1>
         <div class="left_content_wrapper">
             <img class="hi_isaac_img" src="img/hiIAmIsaac.webp" alt="Hi I am Isaac">
             <div class="left_content">
-                <button class="index-btn btn-blue" onclick="location.href='html/introduction.html'">
-                    <div class="btn-inner"><span>關於我</span></div>
-                </button>
-                <button class="index-btn btn-pink" onclick="location.href='html/portfolio.html'">
-                    <div class="btn-inner"><span>作品集</span></div>
-                </button>
+                <a class="index-btn btn-blue" href="html/introduction.html">
+                    <span class="btn-inner"><span>關於我</span></span>
+                </a>
+                <a class="index-btn btn-pink" href="html/portfolio.html">
+                    <span class="btn-inner"><span>作品集</span></span>
+                </a>
             </div>
         </div>
         <div class="right_content">
@@ -90,14 +92,15 @@
     </main>
 
     <footer data-clarity-mask="true">
-        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW">
-            <img style="width: 45px; height: 45px;" src="img/fb_logo45X45.png" alt="FB_logo">
+        <a href="https://www.facebook.com/isaaclaujx?locale=zh_TW" target="_blank" rel="noopener noreferrer" aria-label="Facebook（在新分頁開啟）">
+            <img width="45" height="45" src="img/fb_logo45X45.png" alt="">
         </a>
-        <a href="https://www.threads.com/@junxing0613">
-            <img style="width: 45px; height: 45px;" src="img/threads_logo45X45.png" alt="threads_logo">
+        <a href="https://www.threads.com/@junxing0613" target="_blank" rel="noopener noreferrer" aria-label="Threads（在新分頁開啟）">
+            <img width="45" height="45" src="img/threads_logo45X45.png" alt="">
         </a>
     </footer>
 
+    <script src="script/accessibility.js"></script>
     <script src="script/hero_media.js"></script>
     <script src="script/particles.js"></script>
     <script src="script/back_to_top.js"></script>
