@@ -49,3 +49,14 @@ query/hash 的路徑記錄事件。GA4 的 Enhanced Measurement 也應只保留�
 點擊後由 `email_contact.js` 建立。`<noscript>` 仍保留原生 `mailto:` 後備，但該模式不會執行
 Google tag。GA4 控制台仍建議關閉不需要的 Enhanced Measurement 項目，並啟用 Email／query
 data redaction 作第二層保護。
+
+## 無障礙
+
+網站以 WCAG 2.2 AA 為實作與回歸目標，包含全頁鍵盤操作、跳至主要內容連結、語意化導覽與目前頁面
+標示、至少 24×24 CSS px 的操作目標、可見焦點、對話框焦點管理，以及 320 CSS px 寬度下不產生
+非預期橫向捲動。左下角的動畫控制可暫停粒子、首頁角色與裝飾飛船，設定會在同一瀏覽階段保留；
+`prefers-reduced-motion: reduce` 使用者預設停用非必要動態。
+
+本地驗證會以 Axe Core 掃描 7 個頁面的桌面與 320px 行動版，並以 Chromium 與 WebKit 驗證跳轉
+連結、鍵盤選單、目標尺寸及動畫控制。自動測試不能取代螢幕閱讀器與實際使用者測試，正式內容
+更新後仍應定期進行人工檢查。

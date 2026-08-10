@@ -189,6 +189,10 @@
     margin: 0;
 }
 
+.about-text-indent {
+    text-indent: 2em;
+}
+
 .about-actions {
     display: flex;
     flex-wrap: wrap;

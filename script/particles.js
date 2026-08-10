@@ -23,6 +23,7 @@
     let particles = [];
     let animationFrameId = 0;
     let resizeFrameId = 0;
+    let siteMotionPaused = document.documentElement.classList.contains("site-motion-paused");
 
     class Particle {
         constructor(x, y, velocityX, velocityY, size, color) {
@@ -80,7 +81,7 @@
 
     function createParticles() {
         const mobileMultiplier = width < 600 ? 0.65 : 1;
-        const motionMultiplier = reducedMotionQuery.matches ? 0.4 : 1;
+        const motionMultiplier = reducedMotionQuery.matches || siteMotionPaused ? 0.4 : 1;
         const count = Math.max(
             16,
             Math.min(
@@ -131,7 +132,7 @@
     function startAnimation() {
         stopAnimation();
 
-        if (reducedMotionQuery.matches) {
+        if (reducedMotionQuery.matches || siteMotionPaused) {
             drawParticles(false);
             return;
         }
@@ -181,6 +182,12 @@
         } else {
             startAnimation();
         }
+    });
+
+    document.addEventListener("site:motionchange", (event) => {
+        siteMotionPaused = Boolean(event.detail?.paused);
+        createParticles();
+        startAnimation();
     });
 
     window.addEventListener("pagehide", stopAnimation);

@@ -18,31 +18,31 @@
     <link rel="stylesheet" href="../../css/particles.css">
     <link rel="stylesheet" href="../../css/back_to_top.css">
     <link rel="stylesheet" href="../../css/liquid_glass.css">
+    <link rel="stylesheet" href="../../css/accessibility.css">
     <link rel="stylesheet" href="../../css/konami_rocket.css?v=20260712-ios-backdrop">
 </head>
 
 <body class="portfolio-gallery-body">
     <canvas id="particleCanvas" aria-hidden="true"></canvas>
-    <a class="portfolio-gallery-skip-link" href="#main-content">跳至主要內容</a>
+    <a class="site-skip-link" href="#main-content">跳至主要內容</a>
 
     <header>
         <!-- 保留 alt="Logo"：手機版七連點彩蛋以此作為觸發目標。 -->
         <a href="../../index.html" aria-label="前往作品集首頁">
             <img src="../../img/my_logo.png" alt="Logo" width="68" height="63">
         </a>
-        <nav aria-label="主要導覽">
-            <input type="checkbox" id="nav-checkbox" aria-label="切換導覽選單">
-            <label for="nav-checkbox" class="menu-toggle" aria-label="開啟或關閉導覽選單">
+        <nav class="site-nav" data-site-nav aria-label="主要導覽">
+            <button class="menu-toggle" type="button" data-nav-toggle aria-controls="primary-navigation" aria-expanded="false" aria-label="開啟主要導覽選單">
                 <span></span>
                 <span></span>
                 <span></span>
-            </label>
-            <ul class="nav-links">
+            </button>
+            <ul class="nav-links" id="primary-navigation">
                 <li><a href="../../index.html">首頁</a></li>
                 <li><a href="../introduction.html">關於我</a></li>
-                <li class="dropdown">
-                    <a href="javascript:void(0)" onclick="this.parentElement.classList.toggle('active')">作品集 ▾</a>
-                    <ul class="dropdown-content">
+                <li class="dropdown" data-nav-dropdown>
+                    <button class="dropdown-toggle" type="button" data-dropdown-toggle aria-controls="portfolio-navigation" aria-expanded="false">作品集 ▾</button>
+                    <ul class="dropdown-content" id="portfolio-navigation">
                         <li><a href="../portfolio.html">全部作品</a></li>
                         <li><a href="ip_design.html">形象設計</a></li>
                         <li><a href="poster_design.html" aria-current="page">海報設計</a></li>
@@ -54,7 +54,7 @@
         </nav>
     </header>
 
-    <main id="main-content">
+    <main id="main-content" tabindex="-1">
         <section class="portfolio-gallery" data-portfolio-gallery data-analytics-section="portfolio" aria-labelledby="poster_design-gallery-title">
             <div class="portfolio-gallery__heading">
                 <p class="portfolio-gallery__eyebrow">作品分類／海報設計</p>
@@ -74,16 +74,16 @@
                     <ol class="portfolio-gallery-carousel__list">
                     <li class="portfolio-gallery-carousel__slide"
                         data-gallery-slide
-                        data-title="西洋棋挑戰賽海報"
-                        aria-label="第 1 張，共 8 張：西洋棋挑戰賽海報">
+                        data-title="ANESSA 防曬海報"
+                        aria-label="第 1 張，共 6 張：ANESSA 防曬海報">
                         <a class="portfolio-gallery-carousel__artwork"
                            data-gallery-open
-                           href="../../img/poster_design/chess_challenge.webp"
-                           aria-label="放大檢視：西洋棋挑戰賽海報">
+                           href="../../img/poster_design/Anessa_防曬.png"
+                           aria-label="放大檢視：ANESSA 防曬海報">
                             <span class="portfolio-gallery-carousel__number" aria-hidden="true">01</span>
                             <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/chess_challenge.webp"
-                                 alt="西洋棋挑戰賽海報"
+                                 src="../../img/poster_design/Anessa_防曬.png"
+                                 alt="ANESSA 防曬海報"
                                  loading="eager" fetchpriority="high"
                                  decoding="async"
                                  draggable="false">
@@ -91,98 +91,13 @@
                     </li>
                     <li class="portfolio-gallery-carousel__slide"
                         data-gallery-slide
-                        data-title="棋牌社招募海報"
-                        aria-label="第 2 張，共 8 張：棋牌社招募海報">
-                        <a class="portfolio-gallery-carousel__artwork"
-                           data-gallery-open
-                           href="../../img/poster_design/chess_club_recruitment.webp"
-                           aria-label="放大檢視：棋牌社招募海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">02</span>
-                            <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/chess_club_recruitment.webp"
-                                 alt="棋牌社招募海報"
-                                 loading="lazy"
-                                 decoding="async"
-                                 draggable="false">
-                        </a>
-                    </li>
-                    <li class="portfolio-gallery-carousel__slide"
-                        data-gallery-slide
-                        data-title="聖誕市集海報"
-                        aria-label="第 3 張，共 8 張：聖誕市集海報">
-                        <a class="portfolio-gallery-carousel__artwork"
-                           data-gallery-open
-                           href="../../img/poster_design/christmas_market.webp"
-                           aria-label="放大檢視：聖誕市集海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">03</span>
-                            <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/christmas_market.webp"
-                                 alt="聖誕市集海報"
-                                 loading="lazy"
-                                 decoding="async"
-                                 draggable="false">
-                        </a>
-                    </li>
-                    <li class="portfolio-gallery-carousel__slide"
-                        data-gallery-slide
-                        data-title="遊戲滋味海報"
-                        aria-label="第 4 張，共 8 張：遊戲滋味海報">
-                        <a class="portfolio-gallery-carousel__artwork"
-                           data-gallery-open
-                           href="../../img/poster_design/game_taste.webp"
-                           aria-label="放大檢視：遊戲滋味海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">04</span>
-                            <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/game_taste.webp"
-                                 alt="遊戲滋味海報"
-                                 loading="lazy"
-                                 decoding="async"
-                                 draggable="false">
-                        </a>
-                    </li>
-                    <li class="portfolio-gallery-carousel__slide"
-                        data-gallery-slide
-                        data-title="聯合宿營海報"
-                        aria-label="第 5 張，共 8 張：聯合宿營海報">
-                        <a class="portfolio-gallery-carousel__artwork"
-                           data-gallery-open
-                           href="../../img/poster_design/magic_war.webp"
-                           aria-label="放大檢視：聯合宿營海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">05</span>
-                            <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/magic_war.webp"
-                                 alt="聯合宿營海報"
-                                 loading="lazy"
-                                 decoding="async"
-                                 draggable="false">
-                        </a>
-                    </li>
-                    <li class="portfolio-gallery-carousel__slide"
-                        data-gallery-slide
-                        data-title="麻將競賽海報"
-                        aria-label="第 6 張，共 8 張：麻將競賽海報">
-                        <a class="portfolio-gallery-carousel__artwork"
-                           data-gallery-open
-                           href="../../img/poster_design/mahjong_competition.webp"
-                           aria-label="放大檢視：麻將競賽海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">06</span>
-                            <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/mahjong_competition.webp"
-                                 alt="麻將競賽海報"
-                                 loading="lazy"
-                                 decoding="async"
-                                 draggable="false">
-                        </a>
-                    </li>
-                    <li class="portfolio-gallery-carousel__slide"
-                        data-gallery-slide
                         data-title="香水海報"
-                        aria-label="第 7 張，共 8 張：香水海報">
+                        aria-label="第 2 張，共 6 張：香水海報">
                         <a class="portfolio-gallery-carousel__artwork"
                            data-gallery-open
                            href="../../img/poster_design/香水海報.png"
                            aria-label="放大檢視：香水海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">07</span>
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">02</span>
                             <img class="portfolio-gallery-carousel__image"
                                  src="../../img/poster_design/香水海報.png"
                                  alt="香水海報"
@@ -193,16 +108,67 @@
                     </li>
                     <li class="portfolio-gallery-carousel__slide"
                         data-gallery-slide
-                        data-title="ANESSA 防曬海報"
-                        aria-label="第 8 張，共 8 張：ANESSA 防曬海報">
+                        data-title="巧克力乳清蛋白粉廣告"
+                        aria-label="第 3 張，共 6 張：巧克力乳清蛋白粉廣告">
                         <a class="portfolio-gallery-carousel__artwork"
                            data-gallery-open
-                           href="../../img/poster_design/Anessa_防曬.png"
-                           aria-label="放大檢視：ANESSA 防曬海報">
-                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">08</span>
+                           href="../../img/poster_design/巧克力乳清蛋白粉廣告.png"
+                           aria-label="放大檢視：巧克力乳清蛋白粉廣告">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">03</span>
                             <img class="portfolio-gallery-carousel__image"
-                                 src="../../img/poster_design/Anessa_防曬.png"
-                                 alt="ANESSA 防曬海報"
+                                 src="../../img/poster_design/巧克力乳清蛋白粉廣告.png"
+                                 alt="巧克力乳清蛋白粉廣告"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="西洋棋挑戰賽海報"
+                        aria-label="第 4 張，共 6 張：西洋棋挑戰賽海報">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/poster_design/chess_challenge.webp"
+                           aria-label="放大檢視：西洋棋挑戰賽海報">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">04</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/poster_design/chess_challenge.webp"
+                                 alt="西洋棋挑戰賽海報"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="棋牌社招募海報"
+                        aria-label="第 5 張，共 6 張：棋牌社招募海報">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/poster_design/chess_club_recruitment.webp"
+                           aria-label="放大檢視：棋牌社招募海報">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">05</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/poster_design/chess_club_recruitment.webp"
+                                 alt="棋牌社招募海報"
+                                 loading="lazy"
+                                 decoding="async"
+                                 draggable="false">
+                        </a>
+                    </li>
+                    <li class="portfolio-gallery-carousel__slide"
+                        data-gallery-slide
+                        data-title="聯合宿營海報"
+                        aria-label="第 6 張，共 6 張：聯合宿營海報">
+                        <a class="portfolio-gallery-carousel__artwork"
+                           data-gallery-open
+                           href="../../img/poster_design/magic_war.webp"
+                           aria-label="放大檢視：聯合宿營海報">
+                            <span class="portfolio-gallery-carousel__number" aria-hidden="true">06</span>
+                            <img class="portfolio-gallery-carousel__image"
+                                 src="../../img/poster_design/magic_war.webp"
+                                 alt="聯合宿營海報"
                                  loading="lazy"
                                  decoding="async"
                                  draggable="false">
@@ -224,7 +190,7 @@
                        data-gallery-status
                        aria-live="polite"
                        aria-atomic="true">
-                        01／08　西洋棋挑戰賽海報
+                        01／06　ANESSA 防曬海報
                     </p>
                     <button class="portfolio-gallery-carousel__button"
                             type="button"
@@ -273,6 +239,7 @@
         </p>
     </div>
 
+    <script src="../../script/accessibility.js"></script>
     <script src="../../script/portfolio_gallery_carousel.js"></script>
     <script src="../../script/particles.js"></script>
     <script src="../../script/back_to_top.js"></script>

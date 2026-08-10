@@ -20,6 +20,7 @@
 
     let mode = "pending";
     let pageIsActive = !document.hidden;
+    let siteMotionPaused = document.documentElement.classList.contains("site-motion-paused");
     let validationStarted = false;
     let probeTimeoutId = 0;
     let fallbackHideTimeoutId = 0;
@@ -35,7 +36,7 @@
     }
 
     function preferredFallbackSource() {
-        if (reducedMotionQuery.matches || !pageIsActive) {
+        if (reducedMotionQuery.matches || siteMotionPaused || !pageIsActive) {
             return stillFallbackSource || animatedFallbackSource;
         }
 
@@ -44,7 +45,7 @@
 
     function syncPlayback() {
         if (mode === "video") {
-            if (reducedMotionQuery.matches || !pageIsActive) {
+            if (reducedMotionQuery.matches || siteMotionPaused || !pageIsActive) {
                 video.pause();
             } else {
                 safePlay();
@@ -210,6 +211,11 @@
 
     document.addEventListener("visibilitychange", () => {
         pageIsActive = !document.hidden;
+        syncPlayback();
+    });
+
+    document.addEventListener("site:motionchange", (event) => {
+        siteMotionPaused = Boolean(event.detail?.paused);
         syncPlayback();
     });
 

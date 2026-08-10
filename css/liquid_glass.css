@@ -295,6 +295,7 @@ footer a[href*="threads.com"]:active {
 /* 導覽選單在頁首內保持單層；只有浮出的選單本身使用玻璃。 */
 .nav-links,
 .nav-links li a,
+.dropdown-toggle,
 .dropdown-content,
 .dropdown-content li a {
     border-color: transparent;

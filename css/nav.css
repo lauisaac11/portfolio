@@ -24,17 +24,22 @@ nav {
     gap: 30px;
 }
 
-.nav-links li a {
+.nav-links li a,
+.dropdown-toggle {
     text-decoration: none;
     color: #333333;
     font-family: "cubic_11", sans-serif;
     font-size: 20px;
     transition: color 0.3s ease;
     -webkit-tap-highlight-color: transparent;
-    outline: none;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    padding: 0;
 }
 
-.nav-links li a:hover {
+.nav-links li a:hover,
+.dropdown-toggle:hover {
     color: #ff7bf3;
 }
 
@@ -45,6 +50,13 @@ nav {
     cursor: pointer;
     gap: 5px;
     z-index: 100;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    align-items: center;
+    justify-content: center;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -55,10 +67,6 @@ nav {
     background-color: #333333;
     border-radius: 3px;
     transition: 0.3s;
-}
-
-#nav-checkbox {
-    display: none;
 }
 
 /* Mobile Responsive < 780px */
@@ -90,18 +98,18 @@ nav {
         border-bottom: 1px solid #f0f0f0;
     }
 
-    #nav-checkbox:checked ~ .nav-links {
+    .site-nav.is-open .nav-links {
         display: flex;
     }
 
     /* Hamburger Animation */
-    #nav-checkbox:checked ~ .menu-toggle span:nth-child(1) {
+    .menu-toggle[aria-expanded="true"] span:nth-child(1) {
         transform: rotate(45deg) translate(5px, 6px);
     }
-    #nav-checkbox:checked ~ .menu-toggle span:nth-child(2) {
+    .menu-toggle[aria-expanded="true"] span:nth-child(2) {
         opacity: 0;
     }
-    #nav-checkbox:checked ~ .menu-toggle span:nth-child(3) {
+    .menu-toggle[aria-expanded="true"] span:nth-child(3) {
         transform: rotate(-45deg) translate(5px, -6px);
     }
 
@@ -122,6 +130,14 @@ nav {
     .dropdown-content li a {
         padding: 10px 40px;
         font-size: 16px;
+        text-align: left;
+    }
+
+    .dropdown-toggle {
+        display: block;
+        width: 100%;
+        padding: 15px 25px;
+        border-bottom: 1px solid #f0f0f0;
         text-align: left;
     }
 }
@@ -188,7 +204,8 @@ nav {
 
 /* Show dropdown on hover only on larger screens via CSS or it works implicitly since mobile is handled above */
 @media screen and (min-width: 781px) {
-    .dropdown:hover .dropdown-content {
+    .dropdown:hover .dropdown-content,
+    .dropdown.active .dropdown-content {
         display: block;
     }
 }
