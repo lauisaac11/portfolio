@@ -10,6 +10,7 @@ const EXCLUDED_ROOT_ENTRIES = new Set([
   ".gitignore",
   ".github",
   "scripts",
+  "temp",
   "dist",
   "README.md",
 ]);
