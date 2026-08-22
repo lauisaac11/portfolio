@@ -8,6 +8,7 @@
 .looping-ship {
   position: absolute;
   width: 150px; /* 調整飛船大小 */
+  height: auto;
   top: 50%;
   transform: translateY(-50%);
   
