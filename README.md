@@ -50,6 +50,26 @@ query/hash 的路徑記錄事件。GA4 的 Enhanced Measurement 也應只保留�
 Google tag。GA4 控制台仍建議關閉不需要的 Enhanced Measurement 項目，並啟用 Email／query
 data redaction 作第二層保護。
 
+## SEO 與搜尋引擎索引
+
+7 個公開頁面都具備唯一的 `<title>`、meta description、canonical URL、robots 指示、Open Graph、
+Twitter Card 與 JSON-LD 結構化資料。首頁以 `WebSite`、`WebPage` 與 `Person` 描述網站與作者；
+關於我頁使用 `ProfilePage`；作品分類與作品頁使用 `CollectionPage`、`ItemList` 與
+`BreadcrumbList`，資料內容必須與頁面可見資訊一致。
+
+建置根目錄包含 `robots.txt`，允許抓取並指向 `sitemap.xml`；Sitemap 列出 7 個 canonical URL，
+並透過 image sitemap namespace 收錄作品圖片。GitHub Pages 專案站部署在 `/portfolio/` 子路徑，
+無法由此 repository 寫入網域標準位置 `https://lauisaac11.github.io/robots.txt`，所以現階段必須
+在 Search Console 直接提交 `/portfolio/sitemap.xml`。若日後改用自訂網域或 GitHub Pages 使用者
+根站，請把同一份 robots 規則發布到 origin 根目錄。新增、刪除或重新排序公開作品後，請同步更新
+相關頁面的 JSON-LD、sitemap 圖片項目與 `<lastmod>` 日期；不要加入 meta keywords 或重複關鍵字。
+
+部署後仍需在 Google Search Console 建立 `https://lauisaac11.github.io/portfolio/` 的 URL-prefix
+資源，完成所有權驗證後提交
+`https://lauisaac11.github.io/portfolio/sitemap.xml`。也可在 Bing Webmaster Tools 匯入相同網站與
+sitemap。SEO 設定改善搜尋引擎理解、索引與搜尋結果預覽，但不保證特定關鍵字名次；排名仍取決於
+內容品質、作品說明、外部連結、網站效能與搜尋需求。
+
 ## 無障礙
 
 網站以 WCAG 2.2 AA 為實作與回歸目標，包含全頁鍵盤操作、跳至主要內容連結、語意化導覽與目前頁面
