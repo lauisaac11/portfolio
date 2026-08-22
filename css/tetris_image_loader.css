@@ -17,23 +17,13 @@
     place-items: center;
     overflow: hidden;
     border-radius: var(--tetris-loader-radius);
-    background:
-        radial-gradient(circle at 50% 42%, rgba(255, 255, 255, 0.22), transparent 46%),
-        linear-gradient(145deg, rgba(21, 31, 75, 0.72), rgba(70, 30, 107, 0.64));
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+    background: #29335c;
     opacity: 1;
     transform-origin: top left;
-    transition: opacity 180ms ease;
+    transition: opacity 180ms linear;
     pointer-events: none;
     contain: layout paint style;
     will-change: transform, opacity;
-}
-
-@supports ((-webkit-backdrop-filter: blur(6px)) or (backdrop-filter: blur(6px))) {
-    .tetris-image-loader {
-        -webkit-backdrop-filter: blur(6px) saturate(1.12);
-        backdrop-filter: blur(6px) saturate(1.12);
-    }
 }
 
 .tetris-image-loader[hidden] {
@@ -51,24 +41,26 @@
     max-width: min(64px, 78%);
     aspect-ratio: 1;
     overflow: hidden;
-    border-radius: 7px;
+    border: 2px solid #f7f8ff;
+    border-radius: 3px;
+    background-color: #18203f;
     background-image:
-        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+        linear-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.14) 1px, transparent 1px);
     background-size: 25% 25%;
-    filter: drop-shadow(0 5px 9px rgba(5, 10, 35, 0.4));
 }
 
 .tetris-image-loader--compact .tetris-image-loader__board {
     width: min(34px, 72%);
     min-width: 22px;
-    border-radius: 4px;
+    border-width: 1px;
+    border-radius: 1px;
 }
 
 .tetris-image-loader__piece {
     position: absolute;
     inset: 0;
-    animation: tetris-image-loader-drop 1.55s cubic-bezier(0.3, 0.02, 0.5, 1) infinite;
+    animation: tetris-image-loader-drop 1.4s steps(6, end) infinite;
 }
 
 .tetris-image-loader__piece--t {
@@ -92,12 +84,9 @@
     left: calc(var(--tetris-x) * 25%);
     width: 23%;
     aspect-ratio: 1;
-    border-radius: 2px;
+    border: 1px solid #18203f;
+    border-radius: 0;
     background: var(--tetris-piece-color);
-    box-shadow:
-        inset 1px 1px 0 rgba(255, 255, 255, 0.72),
-        inset -1px -1px 0 rgba(12, 18, 54, 0.28),
-        0 0 7px color-mix(in srgb, var(--tetris-piece-color) 68%, transparent);
 }
 
 .tetris-image-loader__line {
@@ -106,15 +95,15 @@
     bottom: 2%;
     left: 2%;
     height: 23%;
-    border-radius: 2px;
+    border: 1px solid #18203f;
+    border-radius: 0;
     background:
         linear-gradient(90deg,
             #9c72ff 0 24%, transparent 24% 25%,
             #ff8a4d 25% 49%, transparent 49% 50%,
             #63e67d 50% 74%, transparent 74% 75%,
             #ff66dc 75% 100%);
-    box-shadow: 0 0 10px rgba(157, 232, 255, 0.52);
-    animation: tetris-image-loader-clear 1.55s ease-in-out infinite;
+    animation: tetris-image-loader-clear 1.4s steps(2, end) infinite;
 }
 
 @keyframes tetris-image-loader-drop {
@@ -143,18 +132,15 @@
     0%,
     66% {
         opacity: 0.3;
-        transform: scaleX(0.92);
     }
 
     76% {
         opacity: 1;
-        transform: scaleX(1);
     }
 
     88%,
     100% {
         opacity: 0;
-        transform: scaleX(1.08);
     }
 }
 
